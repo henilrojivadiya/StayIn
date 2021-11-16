@@ -1,0 +1,1089 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
+
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" /> -->
+
+<style>
+    .noselect {
+        -webkit-touch-callout: none;
+        /* iOS Safari */
+        -webkit-user-select: none;
+        /* Safari */
+        -khtml-user-select: none;
+        /* Konqueror HTML */
+        -moz-user-select: none;
+        /* Old versions of Firefox */
+        -ms-user-select: none;
+        /* Internet Explorer/Edge */
+        user-select: none;
+        /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+    }
+
+    .qty .count {
+        color: #000;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 30px;
+        padding: 0 2px;
+        min-width: 35px;
+        text-align: center;
+    }
+
+    .qty .plus {
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: top;
+        color: white;
+        width: 30px;
+        height: 30px;
+        font: 30px/1 Arial, sans-serif;
+        text-align: center;
+        border-radius: 50%;
+    }
+
+    .qty .minus {
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: top;
+        color: white;
+        width: 30px;
+        height: 30px;
+        font: 30px/1 Arial, sans-serif;
+        text-align: center;
+        border-radius: 50%;
+        background-clip: padding-box;
+    }
+
+    .minus:hover {
+        background-color: #b5838d !important;
+    }
+
+    .plus:hover {
+        background-color: #b5838d !important;
+    }
+
+    .qty input {
+        border: 0;
+        width: 2%;
+    }
+
+    .box {
+        width: 1000px;
+        margin: 0 auto;
+    }
+
+    .active_tab1 {
+        background-color: #fff;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .inactive_tab1 {
+        background-color: #f5f5f5;
+        color: #333;
+        cursor: not-allowed;
+    }
+
+    .has-error {
+        border-color: #cc0000;
+        background-color: #ffffff;
+    }
+
+    .btn-outline-dark {
+        color: white;
+        background-color: transparent;
+        background-image: none;
+        border-color: #000000;
+    }
+
+    .btn-outline-dark:hover {
+        color: white;
+        background-color: #000000;
+        background-image: none;
+        border-color: #000000;
+    }
+
+    .btn-outline-dark:not(:disabled):not(.disabled).active,
+    .btn-outline-dark:not(:disabled):not(.disabled):active,
+    .show>.btn-outline-dark.dropdown-toggle {
+        color: #fff;
+        background-color: #000000;
+        border-color: #000000;
+    }
+
+    .custom_input {
+        background-color: #1f2229;
+        border: none;
+        border-bottom: solid 1px white;
+        color: white;
+        width: 100%;
+        font-size: large;
+    }
+
+    .custom-file-container__image-preview {
+        box-sizing: border-box;
+        /* transition: all 0.2s ease; */
+        margin-top: 20px;
+        margin-bottom: 40px;
+        height: 250px;
+        width: 100%;
+        border-radius: 5px;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-color: #1f2229;
+        overflow: scroll;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #ffffff;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 15px;
+        letter-spacing: .025em;
+        line-height: 1.6;
+    }
+
+    .side_line {
+        border-left: solid #0071e3;
+        padding-left: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+        color: white;
+    }
+
+    .btn-light {
+        display: none;
+    }
+
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    width: 100%;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    display: block;
+    padding-left: 8px;
+    padding-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: #1f2229;
+}
+
+.select2-container .select2-selection--single {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    /* height: 28px; */
+    user-select: none;
+    -webkit-user-select: none;
+}
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #fff;
+    border-radius: 4px;
+}
+</style>
+
+
+<div class="container mt-140">
+    <div id="description" class="list-details-section">
+        <form id="ad_listing_form" method="POST" action="{% url 'add_listing' %}" enctype="multipart/form-data">{% csrf_token %}
+            <div style="display: none;">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active_tab1" style="border:1px solid #ccc" id="list_login_details">General
+                            Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link inactive_tab1" id="list_personal_details"
+                            style="border:1px solid #ccc">Property
+                            Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link inactive_tab1" id="list_contact_details"
+                            style="border:1px solid #ccc">Gallery</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content" style="margin-top:16px;">
+                <div class="tab-pane active" id="login_details">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="text-align: right;">1/3</div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="side_line">Property Location</h4><br>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Property Name</label><br>
+                                                <input type="text" name="name" class="custom_input" maxlength="200"
+                                                    id="id_name" required /><br><br>
+                                                <span id="error_name" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Property Address</label><br>
+                                                <input type="text" name="address" id="id_address" class="custom_input"
+                                                    maxlength="400" required /><br><br>
+                                                <span id="error_address" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-md-6">
+                                            <div class="form-group ">
+                                                <label>Property Area</label><br>
+                                                <input type="text" id="area" name="area" list="arealist"
+                                                    class="custom_input" required><br><br>
+                                                <span id="error_area" class="text-danger"></span>
+                                                <datalist id="arealist">
+                                                    {% for i in areas %}
+                                                    <option value="{{i.name}}">
+                                                        {% endfor %}
+                                                </datalist>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="col-md-6 desk_view_select">
+                                            <div class="form-group ">
+                                                <label>Property Area</label><br>
+                                                <select id="selectorarea" name="area" style="width: 99%;">
+                                                    <option selected disabled value="0">--- Selected Area ---</option>
+                                                    {% for i in areas %}
+                                                        <option value="{{i}}">{{i.name}}</option>
+                                                    {% endfor %}
+        
+                                                </select><br>
+                                                <span id="error_areas" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Nearest College</label><br>
+                                                <input type="text" id="college" name="clg_name" list="collegelist"
+                                                    class="custom_input" required><br><br>
+                                                <span id="error_college" class="text-danger"></span>
+                                                <datalist id="collegelist">
+                                                    {% for i in colleges %}
+                                                    <option value="{{i.name}}">
+                                                        {% endfor %}
+                                                </datalist>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="col-md-6 desk_view_select">
+                                            <div class="form-group college_class">
+                                                <label>Nearest College</label><br>
+                                                <select id="selectorclg" name="clg_name" style="width: 99%;">
+                                                    <option selected disabled value="0">--- Selected College ---</option>
+                                                    {% for i in colleges %}
+                                                        <option value="{{i.name}}">{{i.name}}</option>
+                                                    {% endfor %}
+        
+                                                </select><br>
+                                                <span id="error_college" class="text-danger"></span>              
+
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Landmark</label><br>
+                                                <input type="text" id="landmark_id" name="landmark" list="landmarklist"
+                                                    class="custom_input" required><br><br>
+                                                <span id="error_landmark" class="text-danger"></span>
+                                                <datalist id="landmarklist">
+                                                    {% for i in landmarks %}
+                                                    <option value="{{i.name}}">
+                                                        {% endfor %}
+                                                </datalist>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="col-md-6 desk_view_select">
+                                            <div class="form-group ">
+                                                <label>Landmark</label><br>
+                                                <select id="selectorlandmark" name="landmark" style="width: 99%;">
+                                                    <option selected disabled value="0">--- Selected Landmark ---</option>
+                                                    {% for i in landmarks %}
+                                                        <option value="{{i.name}}">{{i.name}}</option>
+                                                    {% endfor %}
+        
+                                                </select><br>
+                                                <span id="error_landmark" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        {% if get_property_type != 1 %}
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Property Category</label>
+                                                {{form.property_category }}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Price</label><br>
+                                                <input type="number" id="id_price" name="price" class="custom_input"
+                                                    required /><br><br>
+                                                <span id="error_price" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Deposite</label><br>
+                                                <input type="number" name="deposite" class="custom_input" required
+                                                    id="id_deposite"><br><br>
+                                                <span id="error_deposite" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Description</label><br>
+                                                <textarea name="description" cols="40" rows="2" class="custom_input"
+                                                    required id="id_description"></textarea><br><br>
+                                                <span id="error_description" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div align="center">
+                                        <button type="button" name="btn_login_details" id="btn_login_details"
+                                            class="btn v1 btn-lg">Next</button>
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="personal_details">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="text-align: right;">2/3</div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="side_line">Property Details</h4><br>
+                                <div class="panel-body">
+                                    <br>
+                                    <div class="row">
+                                        {% if get_property_type != 1 %}
+                                        <br>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Number of Bedrooms</label><br>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    {% for i in details_range %}
+                                                    {% if forloop.first %}
+                                                    <label class="btn btn-outline-dark active"
+                                                        style="border-radius: 30%; ">
+                                                        <input type="radio" id="bedrooms" name="total_bedrooms"
+                                                            value="{{i}}" checked required>{{i}}{%if forloop.last %}+{% endif %}
+                                                    </label>&nbsp;&nbsp;&nbsp;
+                                                    {% else %}
+                                                    <label class="btn btn-outline-dark" style="border-radius: 30%; ">
+                                                        <input type="radio" id="bedrooms" name="total_bedrooms"
+                                                            value="{{i}}" required>{{i}}{%if forloop.last %}+{% endif %}
+                                                    </label>&nbsp;&nbsp;&nbsp;
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <br>
+                                                <span id="error_total_bedrooms" class="text-danger"></span>
+                                                <!-- {{form.total_room}} -->
+                                            </div>
+                                        </div><br>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Number Space per Rooms</label><br>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    {% for i in details_range %}
+                                                    {% if forloop.first %}
+                                                    <label class="btn btn-outline-dark active"
+                                                        style="border-radius: 30%;">
+                                                        <input type="radio" id="space_per_room"
+                                                            name="avail_space_per_room" value="{{i}}" checked
+                                                            required>{{i}}{%if forloop.last %}+{% endif %}
+                                                    </label>&nbsp;&nbsp;&nbsp;
+                                                    {% else %}
+                                                    <label class="btn btn-outline-dark " style="border-radius: 30%;">
+                                                        <input type="radio" id="space_per_room"
+                                                            name="avail_space_per_room" value="{{i}}" required>{{i}}{%if forloop.last %}+{% endif %}
+                                                    </label>&nbsp;&nbsp;&nbsp;
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                                <br>
+                                                <span id="error_total_space_per_room" class="text-danger"></span>
+                                                <!-- {{form.total_room}} -->
+                                            </div>
+                                        </div><br>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Number of Bath</label><br>
+                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                    {% for i in details_range %}
+                                                    {% if forloop.first %}
+                                                    <label class="btn btn-outline-dark active"
+                                                        style="border-radius: 30%;">
+                                                        <input type="radio" id="total_bath" name="total_bathroom"
+                                                            value="{{i}}" checked required>{{i}}{%if forloop.last %}+{% endif %}
+                                                    </label>&nbsp;&nbsp;&nbsp;
+                                                    {% else %}
+                                                    <label class="btn btn-outline-dark " style="border-radius: 30%;">
+                                                        <input type="radio" id="total_bath" name="total_bathroom"
+                                                            value="{{i}}" required>{{i}}{%if forloop.last %}+{% endif %}
+                                                    </label>&nbsp;&nbsp;&nbsp;
+                                                    {% endif %}
+                                                    {% endfor %}
+
+                                                </div>
+                                                <br>
+                                                <span id="error_total_bath" class="text-danger"></span>
+                                                <!-- {{form.total_room}} -->
+                                            </div>
+                                        </div><br>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Total Space</label>
+                                                <div class="row">
+                                                    <div class="col-md-4 qty noselect">
+
+                                                        <div class="dec button minus bg-light text-dark"
+                                                            style="border: 1px black solid;">-</div>&nbsp;&nbsp;
+                                                        <input type="text" class="count" name="total_space" min="0"
+                                                            value="1" id="total_space_input" required />
+                                                        &nbsp;&nbsp;<div class="inc button plus bg-light text-dark"
+                                                            style="border: 1px black solid;">+</div>
+
+                                                        <!-- <input type="hidden" name="pro_id" value="{{pro.id}}"> -->
+                                                    </div>
+                                                </div>
+
+                                                <!-- {{form.total_space }} -->
+                                            </div>
+                                        </div><br>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Available Space</label>
+
+                                                <div class="row">
+                                                    <div class="col-md-4 qty noselect">
+                                                        <!-- <input class="custom_input " type="number" min="0" max="{{pro.total_space}}"
+                                                            name="available_space_count" value="{{pro.available_space}}"> -->
+
+                                                        <div class="dec button minus bg-dark">-</div>&nbsp;&nbsp;
+
+                                                        <input type="text" class="count" name="available_space" min="0"
+                                                            value="1" required />
+
+                                                        &nbsp;&nbsp;<div class="inc button plus bg-dark"
+                                                            id="avail_space">+
+                                                        </div>
+
+                                                        <!-- <input type="hidden" name="pro_id" value="{{pro.id}}"> -->
+                                                    </div>
+                                                </div>
+
+                                                <!-- {{form.available_space }} -->
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="side_line">Amenities</h4>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <input type="hidden" class="custom_input" name='amenity_check'
+                                                        id="amenities_check" />
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            {% for a in amenities %}
+                                                            <div class="col-md-4 col-sm-6">
+                                                                <div class="btn-group-toggle" data-toggle="buttons">
+                                                                    <label class="btn btn-outline-dark">
+                                                                        <img src="{{a.icon.url}}"
+                                                                            style="width: 10%; height: 50%;">&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                        <input class="amenities_checkbox"
+                                                                            type="checkbox" value="{{a.id}}"
+                                                                            name="{{a}}" id='id_amenities' required>
+                                                                        {{a}}
+                                                                    </label>
+                                                                </div>
+                                                            </div><br><br><br>
+                                                            {% endfor %}
+                                                            <br>
+                                                            <span id="error_total_amenities" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="side_line">Policies</h4>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <input type="hidden" class="custom_input" name='policies_check'
+                                                        id="policies_check_id" />
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            {% for p in policies %}
+                                                            <div class="col-md-12" style="margin-left: 20px;">
+                                                            <input class="form-check-input policies_checkbox"
+                                                                type="checkbox" value="{{p.id}}" name="{{p}}"
+                                                                id='{{p.id}}' required>
+                                                            <label class="form-check-label" for="{{p.id}}">
+                                                                {{p}}.
+                                                            </label><br><br>
+                                                            </div>
+                                                            {% endfor %}
+                                                            <br>
+                                                            <span id="error_total_policies" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div align="center">
+                                        <button type="button" name="previous_btn_personal_details"
+                                            id="previous_btn_personal_details" class="btn v1 btn-lg">Previous</button>
+                                        <button type="button" name="btn_personal_details" id="btn_personal_details"
+                                            class="btn v1 btn-lg">Next</button>
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="contact_details">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="text-align: right;">3/3</div>
+                        <h4 class="side_line">Property Images</h4><br>
+                        <div class="tab-pane" id="gallery">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div style="width: 400px; margin: 20px auto 20px auto;">
+                                        <div class="custom-file-container" data-upload-id="myupload">
+                                            <label style="color: white;">FIle Upload eith Preview&nbsp;&nbsp;&nbsp;
+                                                <a style="color: white;" href="javascript:void(0)" class="custom-file-container__image-clear">&times;</a></label>
+
+                                            <label class="custom-file-container__custom-file">
+                                                <input type="file" name="property_main_image" id="property_main_image_id" class="custom_input custom-file-container__custom-file__custom-file-input" accept="image/*" required>
+                                                <span id="error_main_image" class="text-danger"></span>
+                                                <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
+                                                <span
+                                                    class="custom-file-container__custom-file__custom-file-control"></span>
+                                            </label>
+
+                                            <div class="custom-file-container__image-preview"
+                                                style="overflow: hidden; background-color: black;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div style="width: 400px; margin: 20px auto 20px auto;">
+                                        <div class="custom-file-container" data-upload-id="myuploadpic">
+                                            <label style="color: white;">Property Images FIle Upload with Preview &nbsp;&nbsp;&nbsp;<a style="color: white;" href="javascript:void(0)"
+                                                    class="custom-file-container__image-clear">&times;</a></label>
+
+                                            <label class="custom-file-container__custom-file">
+                                                <input type="file" name="property_images"
+                                                    id="property_multiple_image_id"
+                                                    class="custom_input custom-file-container__custom-file__custom-file-input"
+                                                    accept="*" multiple aria-label="Multiple Select Files" required>
+                                                <span id="error_multiple_image" class="text-danger"></span>
+                                                <input type="hidden" name="MAX_FILE_SIZE" value="10485760">
+                                                <span
+                                                    class="custom-file-container__custom-file__custom-file-control"></span>
+                                            </label>
+
+                                            <div class="custom-file-container__image-preview" style="overflow: hidden;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div align="center">
+                                <button type="button" name="previous_btn_contact_details"
+                                    id="previous_btn_contact_details" class="btn v1 btn-lg">Previous</button>
+                                <button type="button" name="btn_contact_details" id="btn_contact_details"
+                                    class="btn v1 amenities_save">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<!--Add Listing ends-->
+<!-- Scroll to top starts-->
+<span class="scrolltotop"><i class="lnr lnr-arrow-up"></i></span>
+<!-- Scroll to top ends-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" defer />
+
+<script src="https://unpkg.com/file-upload-with-preview@4.1.0/dist/file-upload-with-preview.min.js"></script>
+
+<script>
+
+    function copy() {
+        document.getElementById('id_address').value = document.getElementById('your_address').value;
+    }
+
+
+    $(document).ready(function () {
+
+    $('#selectorclg').select2();
+    $('#selectorarea').select2();
+    $('#selectorlandmark').select2();
+
+    $('.amenities_save').click(function (event) {
+            var amenities_selected = ""
+            $('.amenities_checkbox:checked').each(function () {
+                amenities_selected += $(this).val() + ","
+            });
+            $('#amenities_check').val(amenities_selected)
+
+            var policies_selected = ""
+            $('.policies_checkbox:checked').each(function () {
+                policies_selected += $(this).val() + ","
+            });
+            $('#policies_check_id').val(policies_selected)
+
+            // var frm = document.getElementById('ad_listing_form');
+            // // frm.submit(); // Submit the form
+            // frm.reset();  // Reset all form data
+            // return false; // Prevent page refresh
+        });
+
+        $('#btn_login_details').click(function () {
+
+            // Property Name
+            if ($.trim($('#id_name').val()).length == 0) {
+                error_name = 'property name is required';
+                $('#error_name').text(error_name);
+                $('#id_name').addClass('has-error');
+            }
+            else {
+                error_name = '';
+                $('#error_name').text(error_name);
+                $('#id_name').removeClass('has-error');
+            }
+
+
+            //Property Address
+
+            if ($.trim($('#id_address').val()).length == 0) {
+                error_address = 'Address is required';
+                $('#error_address').text(error_address);
+                $('#id_address').addClass('has-error');
+            }
+            else {
+                error_address = '';
+                $('#error_address').text(error_address);
+                $('#id_address').removeClass('has-error');
+            }
+
+            // Area
+            
+            // if ($.trim($('#area').val()).length == 0) {
+            //     error_area = 'Area is required';
+            //     $('#error_area').text(error_area);
+            //     $('#area').addClass('has-error');
+            // }
+            // else {
+            //     error_area = '';
+            //     $('#error_area').text(error_area);
+            //     $('#area').removeClass('has-error');
+            // }
+
+                var e = document.getElementById("selectorarea");
+                var strUser = e.options[e.selectedIndex].value;
+                var strUser1 = e.options[e.selectedIndex].text;
+               
+                if (strUser==0) {
+                    error_areas = 'Area is required';
+                    $('#error_areas').text(error_areas);
+                    $('#selectorarea').addClass('has-error');
+                }
+                else {
+                    error_areas = '';
+                    $('#error_areas').text(error_areas);
+                    $('#selectorarea').removeClass('has-error');
+                }
+
+            //College
+
+            // if ($.trim($('#college').val()).length == 0) {
+            //     error_college = 'College is required';
+            //     $('#error_college').text(error_college);
+            //     $('#college').addClass('has-error');
+            // }
+            // else {
+            //     error_college = '';
+            //     $('#error_college').text(error_college);
+            //     $('#college').removeClass('has-error');
+            // }
+
+                var e = document.getElementById("selectorclg");
+                var strUser = e.options[e.selectedIndex].value;
+                var strUser1 = e.options[e.selectedIndex].text;
+               
+                if (strUser==0) {
+                    error_college = 'College is required';
+                    $('#error_college').text(error_college);
+                    $('#selectorclg').addClass('has-error');
+                }
+                else {
+                    error_college = '';
+                    $('#error_college').text(error_college);
+                    $('#selectorclg').removeClass('has-error');
+                }
+
+            // landmark
+
+            // if ($.trim($('#landmark_id').val()).length == 0) {
+            //     error_landmark = 'College is required';
+            //     $('#error_landmark').text(error_landmark);
+            //     $('#landmark_id').addClass('has-error');
+            // }
+            // else {
+            //     error_landmark = '';
+            //     $('#error_landmark').text(error_landmark);
+            //     $('#landmark_id').removeClass('has-error');
+            // }
+
+                var e = document.getElementById("selectorlandmark");
+                var strUser = e.options[e.selectedIndex].value;
+                var strUser1 = e.options[e.selectedIndex].text;
+               
+                if (strUser==0) {
+                    error_landmark = 'Landmark is required';
+                    $('#error_landmark').text(error_landmark);
+                    $('#selectorlandmark').addClass('has-error');
+                }
+                else {
+                    error_landmark = '';
+                    $('#error_landmark').text(error_landmark);
+                    $('#selectorlandmark').removeClass('has-error');
+                }
+
+            //price
+            if ($.trim($('#id_price').val()).length == 0) {
+                error_price = 'Price is required';
+                $('#error_price').text(error_price);
+                $('#id_price').addClass('has-error');
+            }
+            else {
+                error_price = '';
+                $('#error_price').text(error_price);
+                $('#id_price').removeClass('has-error');
+            }
+
+            //deposite
+            if ($.trim($('#id_deposite').val()).length == 0) {
+                error_deposite = 'Deposite is required';
+                $('#error_deposite').text(error_deposite);
+                $('#id_deposite').addClass('has-error');
+            }
+            else {
+                error_deposite = '';
+                $('#error_deposite').text(error_deposite);
+                $('#id_deposite').removeClass('has-error');
+            }
+
+            //description
+            if ($.trim($('#id_description').val()).length == 0) {
+                error_description = 'Deposite is required';
+                $('#error_description').text(error_description);
+                $('#id_description').addClass('has-error');
+            }
+            else {
+                error_description = '';
+                $('#error_description').text(error_description);
+                $('#id_description').removeClass('has-error');
+            }
+
+
+
+            if (error_name != '' || error_address != '' || error_area != '' || error_college != '' || error_landmark != '' || error_price != '' || error_deposite != '' || error_description != '') {
+                return false;
+            }
+            else {
+                $('#list_login_details').removeClass('active active_tab1');
+                $('#list_login_details').removeAttr('href data-toggle');
+                $('#login_details').removeClass('active');
+                $('#list_login_details').addClass('inactive_tab1');
+                $('#list_personal_details').removeClass('inactive_tab1');
+                $('#list_personal_details').addClass('active_tab1 active');
+                $('#list_personal_details').attr('href', '#personal_details');
+                $('#list_personal_details').attr('data-toggle', 'tab');
+                $('#personal_details').addClass('active in');
+            }
+        });
+
+        $('#previous_btn_personal_details').click(function () {
+            $('#list_personal_details').removeClass('active active_tab1');
+            $('#list_personal_details').removeAttr('href data-toggle');
+            $('#personal_details').removeClass('active in');
+            $('#list_personal_details').addClass('inactive_tab1');
+            $('#list_login_details').removeClass('inactive_tab1');
+            $('#list_login_details').addClass('active_tab1 active');
+            $('#list_login_details').attr('href', '#login_details');
+            $('#list_login_details').attr('data-toggle', 'tab');
+            $('#login_details').addClass('active in');
+        });
+
+
+        $('#btn_personal_details').click(function () {
+            // var error_first_name = '';
+            // var error_last_name = ''; 
+
+            // var error_total_bedrooms = '';
+            // var error_total_space_per_room = '';
+            // var error_total_bath = '';
+            // var error_total_amenities = ''
+            // var error_total_policies =''
+
+            // //bedroom
+
+            // var gender = document.getElementsByName('total_bedrooms');
+            // var genValue = false;
+
+            // for(var i=0; i<gender.length;i++){
+            //     if(gender[i].checked == true){
+            //         genValue = true;    
+            //     }
+            // }
+            // if(!genValue){
+            //     error_total_bedrooms = 'Checked Any one'
+            //     $('#error_total_bedrooms').text(error_total_bedrooms);
+            //     $('#bedrooms').addClass('has-error');
+            //     //alert("Please Choose the total room");
+            //     return false;
+            // }else {
+            //     error_total_bedrooms = '';
+            //     $('#error_total_bedrooms').text(error_total_bedrooms);
+            //     $('#bedrooms').removeClass('has-error');
+            // }
+
+            // //space per room
+            // var gender_bathroom = document.getElementsByName('avail_space_per_room');
+            // var genValue = false;
+
+            // for(var i=0; i<gender_bathroom.length;i++){
+            //     if(gender_bathroom[i].checked == true){
+            //         genValue = true;    
+            //     }
+            // }
+            // if(!genValue){
+            //     error_total_space_per_room = 'Checked Any one Bathroom number'
+            //     $('#error_total_space_per_room').text(error_total_space_per_room);
+            //     $('#space_per_room').addClass('has-error');
+            //     //alert("Please Choose the total room");
+            //     return false;
+            // }else {
+            //     error_total_space_per_room = '';
+            //     $('#error_total_space_per_room').text(error_total_space_per_room);
+            //     $('#space_per_room').removeClass('has-error');
+            // }
+
+            // //bathroom
+            // var gender_bathroom = document.getElementsByName('total_bathroom');
+            // var genValue = false;
+
+            // for(var i=0; i<gender_bathroom.length;i++){
+            //     if(gender_bathroom[i].checked == true){
+            //         genValue = true;    
+            //     }
+            // }
+            // if(!genValue){
+            //     error_total_bath = 'Checked Any one Bathroom number'
+            //     $('#error_total_bath').text(error_total_bath);
+            //     $('#total_bath').addClass('has-error');
+            //     //alert("Please Choose the total room");
+            //     return false;
+            // }else {
+            //     error_total_bath = '';
+            //     $('#error_total_bath').text(error_total_bath);
+            //     $('#total_bath').removeClass('has-error');
+            // }
+
+
+
+            //amenities
+            // var g1 = document.getElementsByName('amenities');
+            // console.log(g1)
+            // var genValue = false;
+
+            // for(var i=0; i<g1.length;i++){
+            //     if(g1[i].checked == true){
+            //         genValue = true;    
+            //     }
+            // }
+            // if(!genValue){
+            //     error_total_amenities = 'Checked Any one Amenities'
+            //     $('#error_total_amenities').text(error_total_amenities);
+            //     $('#id_amenities').addClass('has-error');
+            //     //alert("Please Choose the total room");
+            //     return false;
+            // }else {
+            //     error_total_amenities = '';
+            //     $('#error_total_amenities').text(error_total_amenities);
+            //     $('#id_amenities').removeClass('has-error');
+            // }
+
+
+            // policies
+            // var g1 = document.getElementsByName('policies');
+            // console.log(g1)
+            // var genValue = false;
+
+            // for(var i=0; i<g1.length;i++){
+            //     if(g1[i].checked == true){
+            //         genValue = true;    
+            //     }
+            // }
+            // if(!genValue){
+            //     error_total_policies = 'Checked Any one Policies'
+            //     $('#error_total_policies').text(error_total_policies);
+            //     $('#id_policies').addClass('has-error');
+            //     //alert("Please Choose the total room");
+            //     return false;
+            // }else {
+            //     error_total_policies = '';
+            //     $('#error_total_policies').text(error_total_policies);
+            //     $('#id_policies').removeClass('has-error');
+            // }
+
+
+            $('#list_personal_details').removeClass('active active_tab1');
+            $('#list_personal_details').removeAttr('href data-toggle');
+            $('#personal_details').removeClass('active');
+            $('#list_personal_details').addClass('inactive_tab1');
+            $('#list_contact_details').removeClass('inactive_tab1');
+            $('#list_contact_details').addClass('active_tab1 active');
+            $('#list_contact_details').attr('href', '#contact_details');
+            $('#list_contact_details').attr('data-toggle', 'tab');
+            $('#contact_details').addClass('active in');
+
+        });
+
+        $('#previous_btn_contact_details').click(function () {
+            $('#list_contact_details').removeClass('active active_tab1');
+            $('#list_contact_details').removeAttr('href data-toggle');
+            $('#contact_details').removeClass('active in');
+            $('#list_contact_details').addClass('inactive_tab1');
+            $('#list_personal_details').removeClass('inactive_tab1');
+            $('#list_personal_details').addClass('active_tab1 active');
+            $('#list_personal_details').attr('href', '#personal_details');
+            $('#list_personal_details').attr('data-toggle', 'tab');
+            $('#personal_details').addClass('active in');
+        });
+
+        $('#btn_contact_details').click(function () {
+
+            //main images
+
+            if ($.trim($('#property_main_image_id').val()).length == 0) {
+                error_main_image = 'Main Image is required';
+                $('#error_main_image').text(error_main_image);
+                $('#property_main_image_id').addClass('has-error');
+            }
+            else {
+                error_main_image = '';
+                $('#error_main_image').text(error_main_image);
+                $('#property_main_image_id').removeClass('has-error');
+            }
+
+            if ($.trim($('#property_multiple_image_id').val()).length == 0) {
+                error_multiple_image = 'Main Image is required';
+                $('#error_multiple_image').text(error_multiple_image);
+                $('#property_multiple_image_id').addClass('has-error');
+            }
+            else {
+                error_multiple_image = '';
+                $('#error_multiple_image').text(error_multiple_image);
+                $('#property_multiple_image_id').removeClass('has-error');
+            }
+
+
+            if (error_main_image != '' || error_multiple_image != '') {
+                // alert("if condition true")
+                return false;
+            }
+            else {
+                $('#btn_contact_details').attr("disabled", "disabled");
+                alert('inside else')
+                $(document).css('cursor', 'prgress');
+                var frm = document.getElementById('ad_listing_form');
+                frm.submit(); // Submit the form
+                frm.reset();
+            }
+
+        });
+
+    })
+
+    var upload = new FileUploadWithPreview('myupload')
+    var uploadpic = new FileUploadWithPreview('myuploadpic')
+
+    incrementVar = 0;
+    $('.inc.button').click(function () {
+        var $this = $(this),
+            $input = $this.prev('input'),
+            $parent = $input.closest('div'),
+            newValue = parseInt($input.val()) + 1;
+        $parent.find('.inc').addClass('a' + newValue);
+        if ($this.attr('id') === 'avail_space') {
+            if ($('#total_space_input').val() >= newValue) {
+                $input.val(newValue);
+            }
+        } else {
+            $input.val(newValue);
+        }
+        incrementVar += newValue;
+    });
+
+    $('.dec.button').click(function () {
+        var $this = $(this),
+            $input = $this.next('input'),
+            $parent = $input.closest('div'),
+            newValue = parseInt($input.val()) - 1;
+        $parent.find('.inc').addClass('a' + newValue);
+        if (newValue >= 0) { $input.val(newValue); }
+        incrementVar += newValue;
+    });
+
+</script>
+{% endblock %}

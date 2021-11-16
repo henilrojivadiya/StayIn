@@ -1,0 +1,475 @@
+{% extends 'base.html' %}
+
+{% load cache %} 
+{% block content %}
+<style>
+    h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 15px;
+    letter-spacing: .025em;
+    line-height: 1.6;
+}
+a {
+    color: #ffffff;
+    text-decoration: none;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+}
+@media (min-width: 768px) {
+  .collapse.dont-collapse-sm {
+    display: block;
+    height: auto !important;
+    visibility: visible;
+  }
+}
+
+@media only screen and (max-device-width: 480px) {
+    div#footer_hide {
+        display: none;
+    }   
+}
+</style>
+
+<div class="filter-wrapper style1 mt-4" style="padding-top: 30px;">
+    <div class="container-fluid">
+        <div class="row">
+                    <button class="btn btn-dark btn-lg btn-block mt-140 d-block d-sm-none sticky-top" style="bottom: 0; width: 100%;" onclick="myFunction()" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                        Filter
+                    </button>
+            <div class="col-xl-3 collapse dont-collapse-sm" id="collapseExample" style="background-color: #1f2229;">
+                <!--Sidebar starts-->
+                <div class="sidebar-left filter_laptopview" style="margin: 5%;">
+                    <div class="widget filter-widget">
+                        <form class="hero__form v2 filter">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-4 col-sm-6 col-12 mb-3">
+                                    <!-- <div class="row">
+                                        <form method="POST" id='clean_all_data' >{% csrf_token %}
+                                            <div class="col-md-12" align='right' >
+                                                <a href="#" style="color: red;">Clear all</a>
+                                            </div>
+                                        </form>
+                                    </div> -->
+                                    <h6>Popular Location</h6>
+                                    <form method="GET" action="{% url 'property_left_sidebar' %}">
+                                        <input style="background-color: #1f2229; border: none; border-bottom: solid 1px white; color: white;" class="form-control mr-sm-2 tag" type="search" placeholder="Search"
+                                            name="query" id='search_area_id' aria-label="Search"><br>
+                                        <div class="row" style="display: none;">
+                                            <button type="submit" class="side_search" >search</button>
+                                        </div>
+                                    </form>
+                                    <form method="POST" class="form" id="form" action="#">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="p_type_check" id="property_type_check" />
+                                        <input type="hidden" name='p_for_check' id="property_for_check" />
+                                        <input type="hidden" name='p_category_check' id="property_category_check" />
+                                        <input type="hidden" name='amenity_check' id="amenities_check" />
+                                        <input type="hidden" value="{{query}}" name='fetch_search_text' id="search_text_id" />
+                                        <input type="hidden" value="{{avail_count}}" name='availlabel' id="availlabel_id" />
+                                        <!-- <input type="text" name='clear_all_text' id="clear_all_text_id" /> -->
+                                        <hr>
+                                        <div class="col-md-12" align='right' >
+                                            <button type="button" style="color: red;" id="clicked">Clear All</button>
+                                        </div>
+                                        <h6>Price</h6>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="filter-sub-area style1">
+                                                    <div class="filter-title mb-20">
+                                                        <!-- <input type="text" name="price" id="price_id"> -->
+                                                        <span><input class="price_filter_range" type="text"
+                                                                id="amount_two" name="price"
+                                                                style="background-color: #1f2229;" disabled></span>
+                                                    </div>
+                                                    <div id="slider-range_two" class="price-range mb-30">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <h6>Accommodation</h6>
+                                        <!-- <div class="filter-checkbox mb-3">
+                                            {% for type in property_type %}
+                                            
+                                            <input class="property_type_checkbox" type="checkbox" value="{{type.id}}"
+                                                name="{{type}}" id="{{type}}">
+                                           
+                                            <label class="form-check-label" for="{{type}}">
+                                                {{type}}
+                                            </label><br>
+                                            {% endfor %}
+                                        </div> -->
+                                        
+                                        <div class="filter-checkbox mb-3">
+                                            {% for type in property_type %}
+                                            <input class="property_type_checkbox" type="checkbox" value="{{type.id}}"
+                                                name="{{type}}" id="{{type}}" {% if type.id|stringformat:"i" == property_type_id or type.id in property_type_checked %} checked {% endif %}>
+                                            <label class="form-check-label" for="{{type}}">
+                                                {{type}}
+                                            </label><br>
+                                            {% endfor %}
+                                        </div>
+                                        <hr>
+                                        <h6>Accommodation For</h6>
+                                        <!-- <div class="filter-checkbox mb-3">
+                                            {% for type in property_for %}
+                                            <input class="property_for_checkbox" type="checkbox" value="{{type.id}}"
+                                                name="{{type}}" id="{{type}}">
+
+                                            <label class="form-check-label" for="{{type}}">
+                                                {{type}}
+                                            </label><br>
+                                            {% endfor %}
+                                        </div> -->
+                                        <div class="filter-checkbox mb-3">
+                                            {% for type in property_for %}                                                    
+                                                    <input class="property_for_checkbox" type="checkbox" value="{{type.id}}"
+                                                        name="{{type}}" id="{{type}}" {% if type.id in property_for_checked %} checked {% endif %}>
+                                            <label class="form-check-label" for="{{type}}">
+                                                {{type}}
+                                            </label><br>
+                                            {% endfor %}
+                                        </div>
+                                        <hr>
+                                        <h6>Accommodation Category</h6>
+                                        <div class="filter-checkbox mb-3">
+                                            {% for type in property_category %}
+                                            <input class="property_category_checkbox" type="checkbox" value="{{type.id}}"
+                                                name="{{type}}" id="{{type}}">
+
+                                            <label class="form-check-label" for="{{type}}">
+                                                {{type}}
+                                            </label><br>
+                                            {% endfor %}
+                                        </div>
+                                        <hr>
+                                        <h6>Amenities</h6><br>
+                                        <!-- <div class="filter-checkbox mb-3">
+                                            {% for a in amenities %}
+                                            
+                                            <input class="amenities_checkbox" type="checkbox" value="{{a.id}}"
+                                                name="{{a}}" id="{{a}}">
+                                            
+                                            <label class="form-check-label" for="{{a}}">
+                                                {{a}}
+                                            </label><br>
+                                            {% endfor %}
+                                        </div> -->
+                                        <div class="filter-checkbox mb-3">
+                                            {% for a in amenities %}
+                                            <input class="amenities_checkbox" type="checkbox" value="{{a.id}}"
+                                                name="{{a}}" id="{{a}}" {% if a.id in amenity_checked %} checked {% endif %}>
+                                            <label class="form-check-label" for="{{a}}">
+                                                {{a}}
+                                            </label><br>
+                                            {% endfor %}
+                                        </div>
+
+                                        <!-- <button type="submit" class="btn btn-success">Apply</button> -->
+                                    </form>
+
+                                    <input type="button" value="Apply" class="btn btn-success apply_close" onclick="closeNav()">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--Sidebar ends-->
+            </div>
+            <div class="col-xl-9 col-lg-12 check_mobile" id="myDIV">
+                <div class="sidebar-content-right py-100">
+                    <div class="row align-items-center">
+                        <div class="col-lg-3 col-sm-5 col-5">
+                            <select class="listing-input hero__form-input  form-control custom-select class-price">
+                                <option id="ddl_select_id" value="4">Sort by</option>
+                                <option id="ddl_select_id" value="0" {% if 0 in cache_ddl_selected_data %} selected {% endif %}>Sort by Newest</option>
+                                <option id="ddl_select_id" value="1" {% if 1 in cache_ddl_selected_data %} selected {% endif %}>Sort by Oldest</option>
+                                <option id="ddl_select_id" value="2" {% if 2 in cache_ddl_selected_data %} selected {% endif %}>Sort by Price(Low to High)</option>
+                                <option id="ddl_select_id" value="3" {% if 3 in cache_ddl_selected_data %} selected {% endif %}>Sort by Price(High to Low)</option>
+                            </select>
+                            <input type="hidden" name="ddl_selected_data" id="ddl_textbox_id">
+                            <!-- <div class="item-element res-box  text-right sm-left">
+                                <p>Showing <span>{{search_room_count}} of {{total_room_count}}</span> Listings</p>
+                            </div> -->
+                        </div>
+                        <div class="col-lg-4 col-sm-7 col-7">
+
+                        </div>
+                        <div class="col-lg-5 col-sm-12">
+                            <!-- <div class="item-view-mode res-box">
+                                <ul class="nav item-filter-list" role="tablist">
+                                    <li><a class="active" data-toggle="tab" href="#grid-view"><i
+                                                class="fas fa-th"></i></a></li>
+                                    <li><a data-toggle="tab" href="#list-view"><i class="fas fa-list"></i></a></li>
+                                </ul>
+                            </div> -->
+                        </div>
+                    </div>
+                    {% if search_room_count != 0 %}
+                    <div class="item-wrapper" id="room">
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-lg-3 col-sm-5 col-5">
+
+                            </div>
+                            <div class="col-lg-4 col-sm-7 col-7">
+
+                            </div>
+                            <div class="col-lg-5 col-sm-12">
+                                <div class="item-element res-box  text-right sm-left">
+                                    <p>Showing <span>{{search_room_count}} of {{total_room_count}}</span> Listings</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade  show active  property-grid" id="grid-view">
+                                <div class="row">
+                                    {% for room in rooms %}
+                                    {% if room.is_active and room.is_verify %}
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="single-property-box">
+                                            {% for i in property_images %}
+                                            {% if room.id == i.property.id %}
+                                            <div class="property-item">
+                                                <a class="property-img" href="{% url 'property_detail' room.pk %}"
+                                                    target="_blank"><img src="{{i.image.url}}" alt="#"></a>
+                                            </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                            <div class="property-title-box">
+                                                <h4><a href="{% url 'property_detail' room.pk %}"
+                                                        target="_blank">{{room.name}}</a></h4>
+                                                <div class="property-location">
+                                                    <i class="fa fa-map-marker-alt"></i>
+                                                    <p>{{room.landmark}}</p>
+                                                </div>
+                                                <ul class="property-feature">
+                                                    <li> <i class="fas fa-home"></i>
+                                                        <span>{{room.property_type}}</span>
+                                                    </li>
+                                                    <li> <i class="ion-person"></i>
+                                                        <span>{{room.property_for}}</span>
+                                                    </li>
+                                                    <li> <i class="fas fa-bed"></i>
+                                                        <span>{{room.total_space}}</span>
+                                                    </li>
+                                                    <li> <i class="fas fa-bath"></i>
+                                                        <span>{{room.available_space}}</span>
+                                                    </li>
+
+                                                </ul>
+                                                <div class="trending-bottom">
+                                                    <form method="POST" id="price_filter" action="{% url 'property_detail' room.pk %}" target="_blank">{% csrf_token %}
+                                                        <input type="hidden" name="price" value="{{room.price}}"
+                                                            class="form-control" />
+                                                        <div class="trend-left float-left">
+                                                            <button class="btn v1" target="_blank">View</button><br>
+                                                    </form>
+                                                </div>
+                                                <a class="trend-right float-right">
+                                                    <div class="trend-open">
+                                                        <p>₹ {{room.price}}<span class="per_month">{% if room.property_type.id != 1 %}Month{% else %}Year{% endif %}</span> </p>
+                                                    </div>
+                                                </a><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade  property-list" id="list-view">
+                            {% for room in page_obj %}
+                            {% if room.is_active and room.is_verify %}
+                            <div class="single-property-box">
+                                <div class="row">
+                                    <div class="col-md-5 col-sm-12">
+                                        {% for i in property_images %}
+                                        {% if room.id == i.property.id %}
+                                        <div class="property-item">
+                                            <a class="property-img" href="{% url 'property_detail' room.pk %}"
+                                                target="_blank"><img src="{{i.image.url}}" alt="#"></a>
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-7 col-sm-12">
+                                        <div class="property-title-box">
+                                            <h4><a href="single-listing-one.html">{{room.name}}</a></h4>
+                                            <div class="property-location">
+                                                <i class="fa fa-map-marker-alt"></i>
+                                                <p>{{room.landmark}}</p>
+                                            </div>
+                                            <ul class="property-feature">
+                                                <li> <i class="fas fa-arrows-alt"></i>
+                                                    <span>{{room.property_type}}</span>
+                                                </li>
+                                                <li> <i class="fas fa-car"></i>
+                                                    <span>{{room.property_for}}</span>
+                                                </li>
+                                                <li> <i class="fas fa-bed"></i>
+                                                    <span>{{room.total_room}}</span>
+                                                </li>
+                                                <li> <i class="fas fa-bath"></i>
+                                                    <span>{{room.available_space}}</span>
+                                                </li>
+
+                                            </ul>
+                                            <div class="trending-bottom">
+                                                <div class="trend-left float-left">
+
+                                                </div>
+                                                <a class="trend-right float-right">
+                                                    <div class="trend-open">
+                                                        <p>${{room.price}}<span class="per_month">month</span></p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+                        <!--pagination starts-->
+                        <div class="post-nav nav-res pt-50  ">
+                            <div class="row">
+                                <div class="col-md-8 offset-md-2  col-xs-12 ">
+                                    <div class="page-num text-center">
+                                        <ul>
+                                            {% if rooms.has_previous %}
+                                            <li>
+                                                <a href="{% url 'property_left_sidebar' %}?page={{rooms.previous_page_number}}"><i
+                                                    class="lnr lnr-chevron-left"></i></a>
+                                            </li>
+                                            {% endif %}
+
+                                            {% for i in rooms.paginator.page_range %}
+                                            {% if rooms.number == i %}
+                                            <li class="active" for="{{i}}"><a
+                                                    href="{% url 'property_left_sidebar' %}?page={{i}}" id="{{i}}">{{i}}</a></li>
+                                            {% elif i > rooms.number|add:'-10' and i < rooms.number|add:'10' %}
+                                                <li><a href="{% url 'property_left_sidebar' %}?page={{i}}">{{i}}</a>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                                {% if rooms.has_next %}
+                                                <li for="rooms.next_page_number"><a
+                                                        href="{% url 'property_left_sidebar' %}?page={{rooms.next_page_number}}" id="{{rooms.next_page_number}}"><i
+                                                            class="lnr lnr-chevron-right"></i></a></li>
+                                                {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--pagination ends-->
+                    </div>
+                    {% else %}
+                    <div class="error-section mt-150 pb-100">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 offset-md-3  error-text text-center">
+                                    <div class="error-content">
+                                        <img src="/static/images/others/search_home.svg" alt="404 not found" />
+                                        <br>
+                                        <h4>Ohh! No Data Found "{{request.session.session_index_search_text}}"</h4>
+                                        
+                                        <p>Search another way or Filter</p>
+                                    </div>
+                                    <div class="error-search-container">
+                                        <form>
+                                            <input style="background-color: #1f2229; border: none; border-bottom: solid 1px white; color: white;" class="form-control mr-sm-2 tag" type="search" placeholder="Search"
+                                            name="query" id='search_area_id' aria-label="Search"><br>
+                                            <button type="submit"><i class="lnr lnr-magnifier" style="color: white;"></i></button>
+                                        </form>
+                                    </div>
+                                    <br>
+                                    <small><a class="text-grey" href="https://www.freepik.com/free-photos-vectors/business">* Business
+                                            vector created by pikisuperstar - www.freepik.com</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!--Listing Filter ends-->
+<!-- Scroll to top starts-->
+<span class="scrolltotop"><i class="lnr lnr-arrow-up"></i></span>
+<!-- Scroll to top ends-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript" src="/static/js/property/property_view.js"></script>
+
+<script>
+    $(function () {
+
+        $('#clicked').on('click', function () {
+            $('input:checkbox').removeAttr('checked');
+        });
+
+        $(".tag").autocomplete({
+            source: "{% url 'property_left_sidebar' %}",
+        });
+    });
+    // function openNav() {
+    //     document.getElementById("mySidenav").style.width = "250px";    
+    //     }
+
+        function closeNav() {
+            var x = document.getElementById("myDIV");            // data badho aave aeno div
+            var y = document.getElementById("collapseExample"); // Filter mate nu
+            if (x.style.display === "none" || y.style.display != "none") {
+                x.style.display = "block";
+                console.log(y);
+                console.log(x);
+                console.log("closeNav method if mostin")
+                y.style.display = "none";
+            } else {
+                x.style.display = "none";
+                console.log("closeNav method in");
+                
+                console.log(y);
+                console.log(x);
+            }
+           
+        }
+
+        function myFunction() {
+            var x = document.getElementById("myDIV");
+            var y = document.getElementById("collapseExample");
+            if (y.style.display === "none" || x.style.display != "none") {
+                x.style.display = "none";
+                console.log("myFunction method if  most imp loop in");
+                console.log(y);
+                console.log(x);
+                y.style.display = "block";
+            } else {
+                x.style.display = "block";
+                y.style.display = "none";
+                console.log("myFunction method in");
+                
+                console.log(y);
+                console.log(x);
+            }
+        }    
+</script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+{% endblock %}

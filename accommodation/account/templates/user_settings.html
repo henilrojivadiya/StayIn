@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+home page
+{% endblock %}
+
+{% block content %}
+
+<style>
+    div.card {
+        width: 100%;
+        height: 100%;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /* box-shadow: 0 4px 8px 0 rgb(0, 0, 0), 0 6px 20px 0 rgba(0, 0, 0, 0.472); */
+        text-align: left;
+        /* background-color: rgba(0, 0, 0, 0.6); */
+        /* color: white; */
+    }
+</style>
+
+<!-- <script>
+    var a;
+    function ShowHide() {
+// as i
+        if (a == 1) {
+            document.getElementById("abc").style.display = "inline";
+            document.getElementById("as").style.display = "none";            
+            return a = 0;
+        } else {
+            document.getElementById("as").style.display = "inline"; 
+            document.getElementById("abc").style.display = "none";
+            return a = 1;
+        }
+    }
+
+</script> -->
+
+<div class="container" style="padding-left: 10px; padding-top: 8%; padding-right: 10px;">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <b style="font-size: 150%;">Your Profile</b>
+                            <button onclick="ShowHide()">ShowHide</button><br>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- {% if user.is_authenticated %} -->
+                    <form method="POST">{% csrf_token %}
+                        <div class="row" id="abc">
+                            <div class="col-md-12">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="required">First Name</label>
+                                        <input type="text" name="first_name" value="{{user.first_name}}"
+                                            class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="required">Last Name</label>
+                                        <input type="text" name='last_name' value="{{user.last_name}}"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Phone Number</label>
+                                    <input type="text" name='phone_number' value="{{user.phone_number}}"
+                                        class="form-control" aria-describedby="emailHelp">
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Email</label>
+                                    <input type="email" name='email' class="form-control" value="{{user.email}}"
+                                        id="exampleInputEmail1" aria-describedby="emailHelp">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="required">City</label>
+                                        <input type="text" name="city" value="{{user.city}}" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="required">Zip code</label>
+                                        <input type="text" name="zip_code" value="{{user.zip_code}}"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="required">State</label>
+                                        <input type="text" name='state' value="{{user.state}}" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="required">Country</label>
+                                        <input type="text" name='country' value="{{user.country}}" class="form-control">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                            
+                        </div>
+                        <div class="row" id="as">
+                            <div class="col-md-12">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="required">First Name</label>                                   
+                                        <label class="required">{{user.first_name}}</label>                                   
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="required">Last Name</label>
+                                        <label class="required">{{user.last_name}}</label>
+                                        
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Phone Number</label>
+                                    
+                                        
+                                </div>
+                                <div class="form-group">
+                                    <label class="required">Email</label>
+                                    
+                                        
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="required">City</label>
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="required">Zip code</label>
+                                        
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="required">State</label>
+                                        
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="required">Country</label>
+                                        
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                        
+                    </form>
+                    <!-- {% endif %} -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <b style="font-size: 150%;">Change Password</b>
+                            <img src="{% static 'images/icon/pencil.png'%}" style="width: 5%; height: 70%;"><br>
+                        </div>
+                    </div><br>
+                    <form method="POST" action="{% url 'user_registration' %}">{% csrf_token %}
+
+                        <div class="form-group">
+                            <label class="required">Password</label>
+                            <input type="password" name='password' class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Change Password</label>
+                            <input type="password" name='confirm_password' class="form-control"
+                                id="exampleInputPassword1">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Change</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br><br>
+    <h3>Booking History</h3><br>
+    <div class="row">
+        <div class="col-md-4 mb-2">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-dark">View</a>
+                    <a href="#" class="btn btn-success">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-dark">View</a>
+                    <a href="#" class="btn btn-success">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-dark">View</a>
+                    <a href="#" class="btn btn-success">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-dark">View</a>
+                    <a href="#" class="btn btn-success">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-dark">View</a>
+                    <a href="#" class="btn btn-success">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <div class="card">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-dark">View</a>
+                    <a href="#" class="btn btn-success">Book Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

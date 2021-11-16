@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+
+
+<!-- Mirrored from demo.lion-coders.com/html/sarchholm-real-estate-template/db.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Dec 2020 04:13:55 GMT -->
+
+<head>
+    <!-- Metas -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="LionCoders" />
+    <!-- Links -->
+    <link rel="icon" type="image/png" href="#" />
+    <!-- google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
+    <!-- Plugins CSS -->
+    <link href="/static/css/plugin.css" rel="stylesheet" />
+    <!-- Perfect scrollbar CSS-->
+    <link href="/static/css/perfect-scrollbar.css" rel="stylesheet">
+    <!-- style CSS -->
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <!-- Dashboard CSS -->
+    <link href="/static/css/dashboard.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css"
+        href="https://unpkg.com/file-upload-with-preview@4.1.0/dist/file-upload-with-preview.min.css" />
+    <!-- Document Title -->
+    <title>SarchHolm - Real Estate HTML Template</title>
+
+    <style>
+        .model_width_incre {
+        max-width : 60%;
+        height: auto;
+        }
+
+        @media only screen and (max-device-width: 480px) {
+            div#custom_model_width {
+                max-width: 800px;
+            }
+
+            div#image_media{
+                display: none;
+            }      
+        }
+    </style>
+
+</head>
+
+<body style="background-color: black;">
+    <div class="page-wrapper">
+        <!--Sidebar Menu Starts-->
+        <aside class="menu-sidebar js-right-sidebar d-block">
+            <div class="logo">
+                <a href="{% url 'index' %}">
+                    <img src="/static/images/logo-blue.png" alt="SarchHolm" />
+                    <!-- <p style="color: white; font-size: 10px;">HENIL</p> -->
+                </a>
+            </div>
+            <div class="menu-sidebar__content js-scrollbar2" style="background-color: #1f2229;">
+                <nav class="navbar-sidebar2">
+                    <ul class="list-unstyled navbar__list">
+                        {% if user.is_owner %}
+                        <li>
+                            <a href="{% url 'dashboard' %}">
+                                <i class="ion-ios-gear-outline"></i>Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'db_your_property' %}">
+                                <i class="ion-social-buffer-outline"></i>Your Properties
+                            </a>
+                            <span class="inbox-num pending">{{request.session.owner_wise_total_property}}</span>
+                        </li>
+                        <!-- <li>       
+                            <a href="{% url 'db_add_listing' %}">
+                                <i class="ion-ios-plus-outline"></i>Add Property</a>
+                        </li> -->
+
+                        <!-- <li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="ion-ios-plus-outline"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="mybutton" onclick="showModal()" value="Add Property" style="background-color: #1f2229; border: none; color: white; font-size: 15px;"  /> 
+                        </li> -->
+
+                        {% endif %}
+                        <li class="has-sub">
+                            <a class="js-arrow" href="#">
+                                <i class="ion-ios-star-outline"></i>Account
+                            </a>
+                            <ul class="list-unstyled navbar__sub-list js-sub-list">
+                                <li>
+                                    <a href="{% url 'db_my_profile' %}"><i class="ion-ios-person-outline"></i>Your
+                                        Profile</a>
+                                    <!-- <span class="inbox-num active">6</span> -->
+                                </li>
+                                <li>
+                                    <a href="{% url 'change_your_password' %}"><i class="ion-edit"></i>Change
+                                        Password</a>
+                                    <!-- <span class="inbox-num pending">8</span> -->
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{% url 'logout' %}">
+                                <i class="ion-ios-upload-outline"></i>Logout</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <!--Sidebar Menu ends-->
+        <!--Dashboard content Wrapper starts-->
+        <div class="dash-content-wrap" style="background-color: black;">
+            <!-- Top header starts-->
+            <header class="db-top-header">
+                <div class="container">
+                    <div class="row align-items-center" style="background-color: #181818;">
+                        <div class="col-md-9 col-sm-6 col-4">
+                            <div class="site-navbar-wrap v2 style2">
+                                <div class="site-navbar">
+                                    <nav class="site-navigation">
+                                        <div class="container">
+                                            <ul class="site-menu js-clone-nav d-none d-lg-block">
+                                                <li class="has-children">
+                                                    <a class="active" href="{% url 'index' %}" style="color: white;">Home</a>
+                                                </li>
+                                                <li class="has-children">
+                                                    <a href="{% url 'about' %}" style="color: white;">About us</a>
+                                                </li>
+                                                <li class="has-children">
+                                                    <a href="{% url 'contact' %}" style="color: white;">Contact</a>
+                                                </li>
+                                                <li class="d-lg-none"><a class="btn v3" href="add-listing.html"><i
+                                                            class="lnr lnr-home"></i>Add Listing </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                    <div class="d-lg-none sm-right">
+                                        <a href="#" class="mobile-bar js-menu-toggle">
+                                            <span class="lnr lnr-menu"></span>
+                                        </a>
+                                    </div>
+                                    <!--mobile-menu starts -->
+                                    <div class="site-mobile-menu" style="background-color: #1f2229; color: white;">
+                                        <div class="site-mobile-menu-header">
+                                            <div class="site-mobile-menu-close  js-menu-toggle">
+                                                <span class="lnr lnr-cross"></span> </div>
+                                        </div>
+                                        <div class="site-mobile-menu-body"></div>
+                                    </div>
+                                    <!--mobile-menu ends-->
+                                    
+                                    <!--mobile-menu ends-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-8">
+                            <div class="header-button">
+                                <!-- <div class="header-button-item has-noti js-item-menu">
+                                    <i class="ion-ios-bell-outline"></i>
+                                    <div class="notifi-dropdown js-dropdown">
+                                        <div class="notifi__item">
+                                            <div class="content">
+                                                <p>Your Property <b>Villa On Hartford</b> has been approved!</p>
+                                                <span class="date">5 min ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="notifi__item">
+                                            <div class="content">
+                                                <p>You have 3 unread Messages</p>
+                                                <span class="date">5 min ago</span>
+                                            </div>
+                                        </div>
+                                        <div class="notify-bottom text-center py-20">
+                                            <a href="#">View All Notification</a>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="header-button-item js-sidebar-btn">
+                                    {% if user.profile_pic == 'None' %}
+                                        <img src="/static/images/others/profile_pic.svg" alt="...">
+                                    {% else %}
+                                        <img src="{{user.profile_pic.url}}" alt="...">
+                                    {% endif %}
+                                    <!-- <img src="/static/images/others/profile_pic.svg" alt="..."> -->
+                                    <span>{{user.first_name}} {{user.last_name}}<i class="ion-arrow-down-b"></i></span>
+                                </div>
+                                <div class="setting-menu js-right-sidebar d-none d-lg-block">
+                                    <div class="account-dropdown__body">
+                                        <div class="account-dropdown__item">
+                                            <a href="{% url 'db_my_profile' %}">
+                                                Profile</a>
+                                        </div>
+                                        <div class="account-dropdown__item">
+                                            <a href="{% url 'logout' %}">
+                                                Logout</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Top header ends-->
+            <div class="container-fluid">
+                {% block dashboard_content %}
+                    
+                {% endblock %}
+            </div>
+
+        </div>
+        <!--Dashboard content Wrapper ends-->
+    </div>
+
+    <div class="modal fade" id="owner_add_listing" data-backdrop="static">
+        <div class="modal-dialog model_width_incre modal-dialog-centered" id="custom_model_width" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel" style="color: black;">{%if user.is_owner == False %}Owner and{% endif %} Property Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i
+                                class="lnr lnr-cross"></i></span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="user-login-section">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="login-wrapper">
+                                        <div class="ui-dash tab-content">
+                                            <div class="tab-pane fade show active" id="owner" role="tabpanel">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="signup-wrapper" id="image_media">
+                                                            <img src="/static/images/others/add_property.svg" alt="...">
+                                                            <p>Welcome Back! Please Login to your Account for latest property listings.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <form id="login-form" action="{% url 'index' %}" method="POST">
+                                                            {% csrf_token %}
+                                                            {% if user.is_owner == False %}
+                                                            <div class="form-group">
+                                                                <input type="text" name='firstName' tabindex="1"
+                                                                    class="form-control" placeholder="First Name" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" name="lastName" tabindex="2"
+                                                                    class="form-control" placeholder="Last Name" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" name="address" tabindex="2"
+                                                                    class="form-control" placeholder="Your Address"
+                                                                    required>
+                                                            </div>
+                                                            {% endif %}
+                                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                                {% for i in property_types %}
+                                                                <label class="btn btn-outline-dark"
+                                                                    style="border-radius: 30px;">
+                                                                    <input type="radio" name="property_type"
+                                                                        value="{{i.id}}" id="option{{i}}" ><i
+                                                                        class="lnr lnr-home"></i> {{i}}
+                                                                </label>
+                                                                {% endfor %}
+                                                            </div>
+                                                            
+                                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                                {% for i in property_for %}
+                                                                <label class="btn btn-outline-dark"
+                                                                    style="border-radius: 30px;">
+                                                                    <input type="radio" name="property_for" value="{{i.id}}"
+                                                                        id="option" required><i class="ion-ios-person-outline"></i>
+                                                                    {{i}}
+                                                                </label>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <div class="res-box text-center mt-30">
+                                                                <button type="submit" class="btn v8">Continue to Add
+                                                                    Listing</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>      
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Plugin JS-->
+    <script src="/static/js/plugin.js"></script>
+    <!--Perfect Scrollbar JS-->
+    <script src="/static/js/perfect-scrollbar.min.js"></script>
+    <!-- Chart JS -->
+    <!-- <script src='js/chart.js'></script> -->
+    <!-- Main JS-->
+    <script src="/static/js/main.js"></script>
+    <!-- Dashboard JS-->
+    <script src="/static/js/dashboard.js"></script>
+
+    <script>    
+        function showModal() {
+            $('#owner_add_listing').modal('toggle');
+        }
+    </script>
+
+</body>
+
+
+<!-- Mirrored from demo.lion-coders.com/html/sarchholm-real-estate-template/db.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Dec 2020 04:14:08 GMT -->
+
+</html>

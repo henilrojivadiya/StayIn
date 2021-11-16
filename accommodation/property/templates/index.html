@@ -1,0 +1,447 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+     .custom_card {
+        width: auto;
+        height: auto;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        /* box-shadow: 0 4px 8px 0 rgb(0, 0, 0), 0 6px 20px 0 rgba(0, 0, 0, 0.472); */
+        text-align: left;
+        /* background-color: rgba(0, 0, 0, 0.6); */
+        /* color: white; */
+    }
+
+.btn-outline-dark {
+    color: #000000;
+    background-color: transparent;
+    background-image: none;
+    border-color: #000000;
+}
+.btn-outline-dark:hover {
+    color: white;
+    background-color: #000000;
+    background-image: none;
+    border-color: #000000;
+}
+.btn-outline-dark:not(:disabled):not(.disabled).active, .btn-outline-dark:not(:disabled):not(.disabled):active, .show > .btn-outline-dark.dropdown-toggle {
+    color: #fff;
+    background-color: #000000;
+    border-color: #000000;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+}
+
+.section-title.v1 h2 {
+    color: #ffffff;
+    line-height: 1.4;
+    text-transform: capitalize;
+}
+
+.listing-filter input[type="text"] {
+    padding: 4px 15px 0 45px;
+    width: 100%;
+    border: 1px solid #1f2229;
+    border-bottom: 1px solid white;
+    border-radius: 3px;
+    height: 45px;
+    color: white;
+    background-color: #1f2229;
+}
+
+
+
+@media only screen and (max-device-width: 480px) {
+        div#custom_model_width {
+            max-width: 800px;
+        }
+
+        div#image_media{
+            display: none;
+        }      
+}
+
+.model_width_incre {
+        max-width : 60%;
+        height: auto;
+}
+.side_line{
+    border-left: solid #0071e3; 
+    padding-left: 10px;
+}
+</style>
+
+
+{% if same_property_add == True %}
+<div class="alert alert-warning alert-dismissible fade show mt-140" role="alert">
+    <strong>Holy guacamole!</strong> This Address has allready property
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endif %}
+
+<div class="hero v1 section-padding" style="background-color: black; background-image: url(/static/images/bg/index.svg);">
+    
+    <!--Listing filter starts-->
+    <div class="container">
+        <div class="row ">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs hero_list">
+
+                    <!-- <li class="nav-item active">
+                        <a data-toggle="tab" href="#all_property">Buy</a>
+                    </li> -->
+                    
+                    <li class="nav-item active">
+                        <a data-toggle="tab" href="#for_sale">Search Your Accommodation</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a data-toggle="tab" href="#for_rent">Sold</a>
+                    </li> -->
+                </ul>
+                <form class="hero__form v1 filter listing-filter custom_card" method="GET"
+                    action="{% url 'property_left_sidebar' %}">
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-6 col-md-6 col-sm-12 col-12 py-3 pl-30 pr-0">
+                            <div class="input-search">
+                                <input type="text" name="query" id="tags"
+                                    placeholder="Enter Colleges or Popular Location ">
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="exampleInputName1">Person</label>
+                                <input class="form-control mr-sm-2" type="number" min="1" max="20"
+                                    name="person_count" value="1" style="width: 20%;" placeholder="Search"
+                                    aria-label="Search">
+                            </div> -->
+                        </div>
+                        <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 col-12 py-3 pl-30 pr-0">
+                            <select class="hero__form-input  form-control custom-select" name="person_count">
+                                <option>Select Person</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12 py-3 pl-30 pr-0">
+                            <div class="submit_btn">
+                                <button class="btn v3" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Listing filter ends-->
+</div>
+<!--Hero section ends-->
+<br>
+
+
+<div class="category-section v2 mt-100">
+    <div class="container">
+        <div class="row">
+            {% for i, count in property_types.items %}
+            <div class="col-lg-3 col-md-6 col-12">
+                <form method="POST" id="index_form" action="{% url 'property_left_sidebar' %}">{% csrf_token %}
+                    <a href="{% url 'property_left_sidebar' %}">
+                        <div class="single_cat">
+                            {% if forloop.counter == 1 %}
+                            <img src="/static/images/hostel.png" alt="...">
+                            {% elif forloop.counter == 2 %}
+                            <img src="/static/images/Tenament.png" alt="...">
+                            {% elif forloop.counter == 3 %}
+                            <img src="/static/images/Apartment.png" alt="...">
+                            {% elif forloop.counter == 4 %}
+                            <img src="/static/images/category/villa.png" alt="...">
+                            {% endif %}
+
+                            <input type="hidden" value="{{i.id}}" name='property_type_id'>
+                            <br><br>
+                            <h4>
+                                <!-- <a href="javascript:{}" onclick="document.getElementById('index_form').submit();">{{i}}</a> -->
+                                <button type="submit" style="background-color: #1f2229; border: #1f2229 solid 0px; color: white;">{{i}}</button>
+                            </h4>
+                            <p><strong>{{count}}</strong> listings</p>
+                        </div>
+                    </a>
+                </form>
+            </div>
+            {% endfor %}
+            <div class="col-lg-3 col-md-6 col-12">
+                <a href="#">
+                    <div class="single_cat">
+                        <img src="/static/images/category/apartment.png" alt="...">
+                        <h4>Apartment</h4>
+                        <p><strong>78</strong> listings</p>
+
+                    </div>
+                </a>
+            </div>
+            <!-- <div class="col-lg-3 col-md-6 col-12">
+                <a href="#">
+                    <div class="single_cat">
+                        <img src="/static/images/category/home.png" alt="...">
+                        <h4>Family Home</h4>
+                        <p><strong>102</strong> listings</p>
+
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <a href="#">
+                    <div class="single_cat">
+                        <img src="/static/images/category/villa.png" alt="...">
+                        <h4>Villa</h4>
+                        <p><strong>35</strong> listings</p>
+
+                    </div>
+                </a>
+            </div> -->
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<!--Trending events starts-->
+<div class="trending-places">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title v1">
+                    <h2>Recent Properties</h2>
+                </div>
+            </div>
+            <div class="item-wrapper">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane  show active  fade property-grid" id="grid-view">
+                        <div class="row" style="margin: 1%;">
+                            {% for room in recent_properties %}
+                            <div class="col-xl-4 col-md-6 col-sm-12">
+                                <div class="single-property-box">
+                                    <div class="property-item">
+                                        {% for i in property_images %}
+                                        {% if room.id == i.property.id %}
+                                        <div class="property-item">
+                                            <a class="property-img" href="{% url 'property_detail' room.pk %}"
+                                                target="_blank"><img src="{{i.image.url}}" alt="#"></a>
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <!-- <ul class="feature_text">
+                                            <li class="feature_cb"><span> Featured</span></li>
+                                            <li class="feature_or"><span>For Sale</span></li>
+                                        </ul> -->
+                                        <!-- <div class="property-author-wrap">
+                                            <a href="#" class="property-author">
+                                                <img src="images/agents/agent_min_1.jpg" alt="...">
+                                                <span>Tony Stark</span>
+                                            </a>
+                                            <ul class="save-btn">
+                                                <li data-toggle="tooltip" data-placement="top" title="" data-original-title="Photos"><a href=".html" class="btn-gallery"><i class="lnr lnr-camera"></i></a></li>
+                                                <li data-toggle="tooltip" data-placement="top" title="" data-original-title="Bookmark"><a href="#"><i class="lnr lnr-heart"></i></a></li>
+                                                <li data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to Compare"><a href="#"><i class="fas fa-arrows-alt-h"></i></a></li>
+                                            </ul>
+                                            <div class="hidden photo-gallery">
+                                                <a href="images/single-listing/property_view_1.jpg"></a>
+                                                <a href="images/single-listing/property_view_2.jpg"></a>
+                                                <a href="images/single-listing/property_view_3.jpg"></a>
+                                                <a href="images/single-listing/property_view_4.jpg"></a>
+                                                <a href="images/single-listing/property_view_5.jpg"></a>
+                                                <a href="images/single-listing/property_view_6.jpg"></a>
+                                                <a href="images/single-listing/property_view_7.jpg"></a>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                    <div class="property-title-box">
+                                        <h4><a href="{% url 'property_detail' room.pk %}">{{room.name}}</a></h4>
+                                        <div class="property-location">
+                                            <i class="fa fa-map-marker-alt"></i>
+                                            <p>{{room.popular_location}}</p>
+                                        </div>
+                                        <ul class="property-feature">
+                                            <li> <i class="fas fa-home"></i>
+                                                <span>{{room.property_type}}</span>
+                                            </li>
+                                            <li> <i class="ion-person"></i>
+                                                <span>{{room.property_for}}</span>
+                                            </li>
+                                            <li> <i class="fas fa-bed"></i>
+                                                <span>{{room.total_room}}</span>
+                                            </li>
+                                            <li> <i class="fas fa-bath"></i>
+                                                <span>{{room.total_bathroom}}</span>
+                                            </li>
+
+                                        </ul>
+                                        <div class="trending-bottom">
+                                            <!-- <div class="trend-left float-left">
+                                                <ul class="product-rating">
+                                                    <li><i class="fas fa-star"></i></li>
+                                                    <li><i class="fas fa-star"></i></li>
+                                                    <li><i class="fas fa-star"></i></li>
+                                                    <li><i class="fas fa-star-half-alt"></i></li>
+                                                    <li><i class="fas fa-star-half-alt"></i></li>
+                                                </ul>
+                                            </div> -->
+                                            <a class="trend-right float-right">
+                                                <div class="trend-open">
+                                                    <p><span class="per_sale">starts from</span>$25000</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Trending events ends-->
+<div class="modal fade" id="owner_add_listing" data-backdrop="static">
+    <div class="modal-dialog model_width_incre modal-dialog-centered" id="custom_model_width" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel" style="color: black;">{%if user.is_owner == False %}Owner and{% endif %} Property Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i
+                            class="lnr lnr-cross"></i></span></button>
+            </div>
+            <div class="modal-body">
+                <div class="user-login-section">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="login-wrapper">
+                                    <div class="ui-dash tab-content">
+                                        <div class="tab-pane fade show active" id="owner" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="signup-wrapper" id="image_media">
+                                                        <img src="/static/images/others/add_property.svg" alt="...">
+                                                        <p>Welcome Back! Please Login to your Account for latest property listings.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <form id="login-form" action="{% url 'index' %}" method="POST">
+                                                        {% csrf_token %}
+                                                        {% if user.is_owner == False %}
+                                                        <h4 class="side_line">Owner Detail</h4>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="text" name='firstName' tabindex="1"
+                                                                        class="form-control" placeholder="First Name" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="text" name="lastName" tabindex="2"
+                                                                        class="form-control" placeholder="Last Name" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <input type="text" name="address" tabindex="2"
+                                                                        class="form-control" placeholder="Your Address"
+                                                                        required>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endif %}<br>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h4 class="side_line">Property Details</h4>
+                                                                <P>Property Type</P>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                                    {% for i in property_types %}
+                                                                    <label class="btn btn-outline-dark"
+                                                                        style="border-radius: 30px;">
+                                                                        <input type="radio" name="property_type"
+                                                                            value="{{i.id}}" id="option{{i}}"> {{i}}
+                                                                    </label>&nbsp;&nbsp;
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <br>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <p>Property For</p>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                                    {% for i in property_for %}
+                                                                    <label class="btn btn-outline-dark"
+                                                                        style="border-radius: 30px;">
+                                                                        <input type="radio" name="property_for" value="{{i.id}}"
+                                                                            id="option" required>
+                                                                        {{i}}
+                                                                    </label>&nbsp;&nbsp;
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="res-box text-center mt-30">
+                                                            <button type="submit" class="btn v1">Continue to Add
+                                                                Listing</button>
+                                                        </div>
+                                                    </form>
+                                                </div>            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Scroll to top starts-->
+<span class="scrolltotop"><i class="lnr lnr-arrow-up"></i></span>
+<!-- Scroll to top ends-->
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+    $(function () {
+        $("#tags").autocomplete({
+            source: "{% url 'index' %}",
+        });
+    }); 
+</script>
+{% endblock %}

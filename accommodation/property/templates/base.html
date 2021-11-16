@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+
+
+<!-- Mirrored from demo.lion-coders.com/html/sarchholm-real-estate-template/home-v2.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 09 Dec 2020 04:10:21 GMT -->
+
+<head>
+    <!-- Metas -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="LionCoders" />
+    <!-- Links -->
+    <link rel="icon" type="image/png" href="#" />
+    <!-- google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap" rel="stylesheet">
+    <!-- Plugins CSS -->
+    <link href="/static/css/plugin.css" rel="stylesheet" />
+    <!-- style CSS -->
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <link href="/static/css/dashboard.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    
+    <link rel="stylesheet" type="text/css"
+        href="https://unpkg.com/file-upload-with-preview@4.1.0/dist/file-upload-with-preview.min.css" />
+
+    <!-- <link href="/static/css/bootstrap.min.css" rel="stylesheet" /> -->
+    <!-- Document Title -->
+    <title>SarchHolm - Real Estate HTML Template</title>
+
+    <style>
+        @media only screen and (max-device-width: 480px) {       
+            .custom_hide {
+                visibility: hidden;
+            }
+        }
+
+    </style>
+</head>
+
+<body style="background-color: black;">
+    <!--Preloader starts-->
+    <div class="preloader js-preloader">
+        <!-- <img style="background-color: black;" src="/static/images/preloader.gif" alt="..."> -->
+        <h1 style="color: white;">Stay In</h1>
+    </div>
+    <!--Preloader ends-->
+    <!--Page Wrapper starts-->
+    <div class="page-wrapper">
+        <!--header starts-->
+        <header class="header transparent scroll-hide">
+            <!--Header Top Section Starts-->
+            <div class="header-top-section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-sm-8 col-12">
+                            <div class="header-top-left">
+                                <ul>
+                                    <li><i class="fa fa-phone"></i> <a href="tel:4444356348">+444 435 6348</a></li>
+                                    <li><i class="fa fa-envelope"></i><a
+                                            href="mailto:info@sarchholm.com">henilrojivadiya@gmail.com</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-12">
+                            <div class="menu-btn">
+                                <ul class="user-btn">
+                                    {% if user.is_authenticated %}
+                                    <li><a href="{% url 'property_left_sidebar' %}"><i
+                                                class="fas fa-arrows-alt-h"></i></a>
+                                        <span>3</span>
+                                    </li>
+                                    <li><a href="#"><i class="lnr lnr-heart"></i></a>
+                                        <span>0</span>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Header Top Section Ends-->
+            <!--Main Menu starts-->
+            <div class="site-navbar-wrap v2">
+                <div class="container">
+                    <div class="site-navbar">
+                        <!-- <span class="mobile_view_only" onclick="openNav()">&#9776; Filter</span> -->
+                        <div class="row align-items-center">
+                            <div class="col-lg-2 col-md-6 col-7" style="text-align: center;">
+                                <a class="navbar-brand" href="{% url 'index' %}">
+                                    <!-- <img src="/static/images/logo-blue.png"alt="logo" class="img-fluid"> -->
+                                    <h3 style="color: white;">HENIL</h3>
+                                </a>
+                            </div>
+                            <div class="col-lg-5 col-md-1 col-1  order-2 order-lg-1 pl-xs-0">
+                                <nav class="site-navigation text-left">
+                                    <div class="container">
+                                        <ul class="site-menu js-clone-nav d-none d-lg-block">
+                                            <li class="has-children">
+                                                <a class="active" href="{% url 'index' %}">Home</a>
+                                            </li>
+                                            <li class="has-children">
+                                                <a href="{% url 'about' %}">About us</a>
+                                            </li>
+                                            <li class="has-children">
+                                                <a href="{% url 'contact' %}">Contact</a>
+                                            </li>
+                                            {% if user.is_authenticated %}
+                                            {% if user.is_owner %}
+                                            <li class="has-children">
+                                                <a href="{% url 'dashboard' %}">Dashboard</a>
+                                            </li>
+                                            {% else %}
+                                            <li class="has-children">
+                                                <a href="{% url 'db_my_profile' %}">Dashboard</a>
+                                            </li>
+                                            {% endif %}
+                                            <li class="has-children">
+                                                <a href="{% url 'logout' %}">Logout</a>
+                                            </li>
+                                            {% endif %}
+                                            <li class="d-lg-none">
+                                                <a class="btn v1" style="width: 100%;" href="#" data-toggle="modal" data-target="#owner_add_listing"><i class="lnr lnr-home"></i>Add Listing </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                                <div class="d-lg-none sm-right">
+                                    <a href="#" class="mobile-bar js-menu-toggle active">
+                                        <span class="lnr lnr-menu"></span>
+                                    </a>
+                                </div>
+                                <!--mobile-menu starts -->
+                                <div class="site-mobile-menu">
+                                    <div class="site-mobile-menu-header">
+                                        <div class="site-mobile-menu-close js-menu-toggle">
+                                            <span class="lnr lnr-cross"></span>
+                                        </div>
+                                    </div>
+                                   <div class="site-mobile-menu-body"></div>
+                                </div>
+                                <!--mobile-menu ends-->
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-4 order-1 order-lg-2 text-right pr-xs-0">
+                                <div class="menu-btn">                           
+                                    <div class="col-md-4">
+                                        {% if index == True %}
+                                        <div class="add-list">
+                                            <a class="btn v3" href="#" data-toggle="modal"
+                                                data-target="#owner_add_listing"><i class="lnr lnr-home"></i>List Your Property
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-8 col-sm-6 col-8">
+                                        {% if user.is_authenticated == False %}
+                                        <a href="{% url 'login' %}" class="btn v1 mr-3"><i
+                                                class="lnr lnr-user"></i> Login</a>
+                                        {% else %}
+                                        <div class="header-button">
+                                            <div class="header-button-item js-sidebar-btn custom_hide">
+                                                {% if user.profile_pic == 'None' %}
+                                                    <img src="/static/images/others/profile_pic.svg" alt="...">
+                                                {% else %}
+                                                    <img src="{{user.profile_pic.url}}" alt="...">
+                                                {% endif %}
+                                                <!-- <img src="/static/images/others/profile_pic.svg" alt="..."> -->
+                                                <span><i class="ion-arrow-down-b"></i></span>
+                                            </div>
+                                            <div class="setting-menu js-right-sidebar d-none d-lg-block">
+                                                <div class="account-dropdown__body">
+                                                    <div class="account-dropdown__item">
+                                                        <a href="{% url 'db_my_profile' %}">
+                                                            Profile</a>
+                                                    </div>
+                                                    <div class="account-dropdown__item">
+                                                        <a href="{% url 'logout' %}">
+                                                            Logout</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Main Menu ends-->
+        </header>
+        <!--Header ends-->
+        <!--Hero section starts-->
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+    <!--Page Wrapper ends-->
+    <!--Footer Starts-->
+    
+     
+<div class="footer-wrapper v2 footer_hide_class" id="footer_hide" style="color: white; background-color:#181818;">
+    <div class="footer-top-area">
+        <div class="container">
+            <div class="row nav-folderized">
+                <div class="col-lg-4 col-md-12">
+                    <div class="footer-logo">
+                        <!-- <a href="index-2.html"> <img src="/static/images/logo-white.png" alt="logo"></a> -->
+                        <h3 class="title" style="color: white;">Our Contect</h3>
+                      
+                        <div class="company-desc">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio excepturi nam
+                                totam sequi, ipsam consequatur repudiandae libero illum.
+                            </p>
+                            <ul class="list footer-list mt-20">
+                                <li>
+                                    <div class="contact-info">
+                                        <div class="icon">
+                                            <i class="fa fa-map-marker-alt"></i>
+                                        </div>
+                                        <div class="text">13th North Ave, Florida, USA</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="contact-info">
+                                        <div class="icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="text"><a href="#">info@sarchholm.com</a></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="contact-info">
+                                        <div class="icon">
+                                            <i class="fas fa-phone-alt"></i>
+                                        </div>
+                                        <div class="text">+44 078 767 595</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-12 text-center sm-left">
+                    <div class="footer-content nav">
+                        <h2 class="title">Quick Links</h2>
+                        <ul class="list res-list">
+                            <li><a class="link-hov style2" href="{% url 'login' %}">Login</a></li>
+                            <li><a class="link-hov style2" href="{% url 'user_registration' %}">Registration</a></li>
+                            <li><a class="link-hov style2" href="{% url 'dashboard'%}">Dashboard</a></li>
+                            <li><a class="link-hov style2" href="{% url 'about'%}">About Us</a></li>
+                            <li><a class="link-hov style2" href="{% url 'contact'%}">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12 text-center sm-left">
+                    <div class="footer-content nav">
+                        <h2 class="title">Connect with Us</h2>
+                        <ul class="list res-list" >
+                            <li ><a href="#" style="color: white;">Facebook</a></li>
+                            <li ><a href="#" style="color: white;">Twitter</a></li>
+                            <li ><a href="#" style="color: white;">Instagram</a></li>
+                            <li ><a href="#" style="color: white;">LinkedIn</a></li>
+                            <li ><a href="#" style="color: white;">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12">
+                    <div class="footer-content">
+                        <h4 class="title">Subscribe</h4>
+                        <div class="value-input-wrap newsletter">
+                            <form action="#">
+                                <input type="text" placeholder="Your mail address ..">
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                        <div class="footer-social-wrap">
+                            <p>Follow us on </p>
+                            <ul class="social-buttons style2">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fab fa-pinterest-p"></i></a></li>
+                                <li><a href="#"><i class="fab fa-youtube"></i></a></li>
+                                <li><a href="#"><i class="fab fa-dribbble"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom-area">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8 offset-md-2">
+                    <p>
+                        ©SarchHolm 2019. All rights reserved. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+      
+    <!--Footer ends-->
+    <!--login Modal starts-->
+    <div class="modal fade" id="user-login-popup">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true"><i class="lnr lnr-cross"></i></span></button>
+                </div>
+                <div class="modal-body">
+                    <!--User Login section starts-->
+                    <div class="user-login-section">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="ui-list nav nav-tabs mb-30" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-toggle="tab" href="#login" role="tab"
+                                                aria-selected="true">Login</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#register" role="tab"
+                                                aria-selected="false">Register</a>
+                                        </li>
+                                    </ul>
+                                    <div class="login-wrapper">
+                                        <div class="ui-dash tab-content">
+                                            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <form id="login-form" action="{% url 'login' %}" method="POST">
+                                                            {% csrf_token %}
+                                                            <div class="form-group">
+                                                                <input type="text" name='email' id="username"
+                                                                    tabindex="1" class="form-control"
+                                                                    placeholder="email" value="" required="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="password" name="password" id="password"
+                                                                    tabindex="2" class="form-control"
+                                                                    placeholder="Password">
+                                                            </div>
+                                                            <div class="row mt-20">
+                                                                <div class="col-md-6 col-12 text-left">
+                                                                    <div class="res-box">
+                                                                        <input id="check-l" type="checkbox"
+                                                                            name="check">
+                                                                        <label for="check-l">Remember me</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6 col-12 text-right">
+                                                                    <div class="res-box sm-left">
+                                                                        <a href="#" tabindex="5"
+                                                                            class="forgot-password">Forgot Password?</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="res-box text-center mt-30">
+                                                                <button type="submit" class="btn v8"><span
+                                                                        class="lnr lnr-exit"></span> Log In</button>
+                                                            </div>
+                                                        </form>
+                                                        <!-- <div class="social-profile-login  text-left mt-20">
+                                                            <h5>or Login with</h5>
+                                                            <ul class="social-btn">
+                                                                <li class="bg-fb"><a href="#"><i
+                                                                            class="fab fa-facebook-f"></i></a></li>
+                                                                <li class="bg-tt"><a href="#"><i
+                                                                            class="fab fa-twitter"></i></a></li>
+                                                                <li class="bg-ig"><a href="#"><i
+                                                                            class="fab fa-instagram"></i></a></li>
+                                                            </ul>
+                                                        </div> -->
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="signup-wrapper">
+                                                            <img src="/static/images/others/login-1.png" alt="...">
+                                                            <p>Welcome Back! Please Login to your Account for latest
+                                                                property listings.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="register" role="tabpanel">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <form id="register-form" action="{% url 'user_registration' %}"
+                                                            method="post">{% csrf_token %}
+                                                            <!-- <div class="form-group">
+                                                                <input type="text" name="first_name" id="first_name"
+                                                                    tabindex="1" class="form-control"
+                                                                    placeholder="First Name" value="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="text" name="last_name" id="last_name"
+                                                                    tabindex="1" class="form-control"
+                                                                    placeholder="Last Name" value="">
+                                                            </div> -->
+                                                            <div class="form-group">
+                                                                <input type="text" name="phone_number" id="phone_number"
+                                                                    tabindex="1" class="form-control"
+                                                                    placeholder="Phone Number" value="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="email" name="email" id="email" tabindex="1"
+                                                                    class="form-control" placeholder="Email Address"
+                                                                    value="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="password" name="password"
+                                                                    id="user_password" tabindex="2" class="form-control"
+                                                                    placeholder="Password">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="password" name="confirm_password"
+                                                                    id="confirm-password" tabindex="2"
+                                                                    class="form-control" placeholder="Confirm Password">
+                                                            </div>
+                                                            <div class="res-box text-left">
+                                                                <input type="checkbox" tabindex="3" class=""
+                                                                    name="remember" id="remember">
+                                                                <label for="remember">I've read and accept terms &amp;
+                                                                    conditions</label>
+                                                            </div>
+                                                            <div class="res-box text-center mt-30">
+                                                                <button type="submit" class="btn v8"><i
+                                                                        class="lnr lnr-enter"></i>Sign Up</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="signup-wrapper">
+                                                            <img src="/static/images/others/login-1.png" alt="...">
+                                                            <p>Create an account to find the best Property for you.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--User login section ends-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--login Modal ends-->
+
+    <!--Scripts starts-->
+    <!--plugin js-->
+    <script src="/static/js/plugin.js"></script>
+    <!--google maps-->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_8C7p0Ws2gUu7wo0b6pK9Qu7LuzX2iWY&amp;libraries=places&amp;callback=initAutocomplete"></script> -->
+    <!--Main js-->
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <!-- <script src="/static/js/bootstrap.min.js"></script> -->
+    <!--Scripts ends-->
+</body>

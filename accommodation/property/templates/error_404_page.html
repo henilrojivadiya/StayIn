@@ -1,0 +1,33 @@
+{% extends 'base_dashboard.html' %}
+
+{% block dashboard_content %}    
+<!--error  start-->
+<div class="error-section mt-150 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3  error-text text-center">
+                <div class="error-content">
+                    <img src="/static/images/others/404.png" alt="404 not found" />
+                    <h4>Ohh! Page Not Found</h4>
+                    <p>Perhaps searching can help or go back to <a href="{% url 'index' %}">Homepage</a> </p>
+                </div>
+                <!-- <div class="error-search-container">
+                    <form>
+                        <input type="text" placeholder="Search.." name="search">
+                        <button type="submit"><i class="lnr lnr-magnifier"></i></button>
+                    </form>
+                </div>
+                <br>
+                <small><a class="text-grey" href="https://www.freepik.com/free-photos-vectors/business">* Business
+                        vector created by pikisuperstar - www.freepik.com</a></small> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!--error ends-->
+<!-- Scroll to top starts-->
+<span class="scrolltotop"><i class="lnr lnr-arrow-up"></i></span>
+<!-- Scroll to top ends-->
+</div>
+<!--Page Wrapper ends-->
+{% endblock%}

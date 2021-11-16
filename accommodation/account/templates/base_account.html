@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <style>
+        .bg-dark {
+            background-color: #1f2229;
+        }
+
+        .custom_input {
+            background-color: #1f2229;
+            border: solid 1px white;
+            border-bottom: solid 1px white;
+            color: white;
+            width: 100%;
+            font-size: medium;
+            padding: 0px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 15px;
+            letter-spacing: .025em;
+            line-height: 1.6;
+        }
+
+        .custom_fount {
+            color: gray;
+        }
+        span{
+    position: absolute;
+    right: 25px;
+    transform: translate(0,-50%);
+    top: 80%;
+    cursor: pointer;
+}
+.fa{
+    font-size: 20px;
+    color: #7a797e;
+}
+.card {
+    border-radius: 30px;
+}
+    </style>
+</head>
+
+<body style="background-color: black;">
+    <!-- Just an image -->
+    <nav class="navbar" style="background-color: #181818;">
+        <a class="navbar-brand" href="#">
+            <img src="/static/images/logo-blue.png" width="40%" height="30" alt="logo" class="img-fluid">
+        </a>
+    </nav>
+
+    {% block account_content %}
+    
+    {% endblock %}
+
+</body>
+<script>
+    var state = false;
+    function toggle() {
+        if (state) {
+            document.getElementById("password").setAttribute("type", "password");
+            document.getElementById("eye").style.color = '#7a797e';
+            state = false;
+        }
+        else {
+            document.getElementById("password").setAttribute("type", "text");
+            document.getElementById("eye").style.color = '#5887ef';
+            state = true;
+        }
+    }
+</script>
+</html>

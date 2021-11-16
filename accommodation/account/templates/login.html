@@ -1,0 +1,88 @@
+{% extends 'base_account.html' %}
+
+{% block account_content %}
+
+
+
+<div class="error-section mt-100 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3  error-text text-center">
+                <div class="error-content">
+                    {% for message in messages %}
+                    <div class="card" style="border-color: #c40000; height: 15%; background-color: black;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img class="img-fluid" src="/static/images/warning.png" alt="...">
+                                </div>
+                                <div class="col-md-10">
+                                    <h8 style="color: #c40000;">There was a problem</h8><br>
+                                    <h8 style="color: red;">{{message}}</h8>
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
+                    {% endfor %}
+
+                </div>
+                <div class="error-search-container">
+                    <div class="card text-light" style="background-color: #1f2229;">
+                        <div class="card-body">
+                            <h4>Login</h4>
+                            {{email_msg}}
+                            <hr />
+                            <form id="login-form" action="#" method="POST">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="text" name='email' id="email" tabindex="1" class="custom_input"
+                                                value="" required="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input type="password" name="password" id="password" tabindex="2" class="custom_input">
+                                                <span>
+                                                    <i class="fa fa-eye" id="eye" onclick="toggle()">
+                                                    </i>
+                                                </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                </div>
+                                <div class="res-box text-center mt-10" style="padding-left: 10%;">
+                                    <button type="submit" class="btn v1" style="width: 50%;"><span
+                                            class="lnr lnr-exit"></span> Log In</button>
+                                </div><br>
+                                <hr style="background-color: black;">
+                                <div class="row mt-20">
+                                    <div class="col-md-12 col-12 ">
+                                        <div class="res-box sm-left custom_fount">
+                                            Forgot Password? <a href="{% url 'password_reset' %}" tabindex="5"
+                                                class="forgot-password">Reset</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-10">
+                                    <div class="col-md-12 col-12">
+                                        <div class="res-box sm-left custom_fount">
+                                            Don't have an account? <a href="{% url 'user_registration' %}" tabindex="5"
+                                                class="forgot-password">Sign up</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,304 @@
+{% extends 'base_dashboard.html' %}
+
+{% block dashboard_content %}
+<style>
+    a {
+    color: #ffffff;
+    text-decoration: none;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+}
+.side_line{
+    border-left: solid #0071e3; 
+    padding-left: 10px;
+}
+.list-details-section {
+    background: #1f2229;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 30px;
+}
+
+.model_width_incre {
+    max-width : 60%;
+    height: auto;
+}
+
+        @media only screen and (max-device-width: 480px) {
+            div#error_model_width {
+                max-width: 800px;
+            }
+
+            div#image_media_error_page{
+                display: none;
+            }      
+        }
+</style>
+
+<!-- <div class="row">
+    <div class="col-md-12">
+        <div class="recent-activity">
+            <div class="act-title">
+                <h5>Recent Activities</h5>
+            </div>
+            <ul class="act-wrap">
+                <li class="alert br-o fade show">
+                    Your Property <span class="review-stat">Villa On Hartford</span> has been approved!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><i class="ion-android-close"></i></span>
+                    </button>
+                    <p>30 mins ago</p>
+                </li>
+                <li class="alert br-o fade show">
+                    <span class="review-stat">Andrew</span> sends a Booking request for <span class="review-stat">Villa
+                        on Sunbury</span> Property!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><i class="ion-android-close"></i></span>
+                    </button>
+                    <p>5 hours ago</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div> -->
+
+<!-- Dashboard Statistics starts-->
+<div class="statistic-wrap">
+    {% if add_listing == True %}
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <strong>Add Property Successfully!</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    {% if same_property_address == True %}
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        <strong>This Address is all ready exists Please try another address!</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    <div class="act-title">
+        <h5 class="side_line">Recent Activities</h5>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="statistic__item item--red">
+                    <h2 class="counter-value">{{request_pending_count}}</h2>
+                    <span class="desc">Request Pending</span>
+                    <div class="icon">
+                        <img src="/static/images/dashboard/home.png" alt="...">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="statistic__item item--blue">
+                    <h2 class="counter-value">{{deactivated_property_count}}</h2>
+                    <span class="desc">Deactivated Property</span>
+                    <div class="icon">
+                        <img src="/static/images/dashboard/review.png" alt="...">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="statistic__item item--green">
+                    <h2 class="counter-value">{{activated_property_count}}</h2>
+                    <span class="desc">Activated Property</span>
+                    <div class="icon">
+                        <img src="/static/images/dashboard/like.png" alt="...">
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-xl-3 col-md-6 col-12">
+                <div class="statistic__item item--orange">
+                    <h2 class="counter-value">734</h2>
+                    <span class="desc">Total Views</span>
+                    <div class="icon">
+                        <img src="/static/images/dashboard/bar-chart.png" alt="...">
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+</div>
+<!-- Dashboard Statistics ends-->
+<!--Dashboard content starts-->
+
+{% if user.is_authenticated %}
+{% if user.is_owner %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="recent-activity my-listing mb-4">
+            <div class="act-title">
+                <h5 class="side_line">{% if properties_count != 0 %}Listed Properties{% else %}Add Property{% endif %}</h5>
+            </div>
+            <div class="viewd-item-wrap">
+                {% if properties_count != 0 %}
+                {% for pro in request_pending %}
+                <div id="description" class="list-details-section">
+                    <div class="most-viewed-item">
+                        {% for i in property_images %}
+                        {% if pro.id == i.property.id %}
+                        <div class="most-viewed-img">
+                            <a href="{% url 'db_your_property_detail' pro.pk %}"><img src="{{i.image.url}}" alt="..."></a>
+                            <ul class="feature_text">
+                                <li class="feature_or" style="background-color: #00000094;"><span>{{pro.property_type}}</span></li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class="most-viewed-detail">
+                            <h3><a href="{% url 'db_your_property_detail' pro.pk %}">{{pro.name}}</a></h3>
+                            <p class="list-address"><i class="fas fa-map-marker-alt"></i>{{pro.address}}</p>
+                            <div class="trend-open">
+                                <p>${{pro.price}}<span class="per_month">month</span></p>
+                            </div>
+                            <div class="ratings">
+                                {% if pro.is_verify %}
+                                <span class="badge badge-dark mr-2" style="font-size: 13px;"><small>Request
+                                        Accepted</small></span>
+                                {% else %}
+                                <span class="badge badge-danger mr-2" style="font-size: 13px;"><small>Request
+                                        Pending</small></span>
+                                {% endif %}
+                                {% if pro.is_active %}
+                                <span class="badge badge-success" style="font-size: 13px;"><small>Activeted</small></span>
+                                {% else %}
+                                <span class="badge badge-danger" style="font-size: 13px;"><small>Deactiveted</small></span>
+                                {% endif %}
+                            </div>
+                            <!-- <div> <span class="badge badge-pill badge-primary">Activated</span></div> -->
+                        </div>
+                        {% if pro.is_verify == False and pro.is_active == False %}
+                        <div class="listing-button">
+                            <a href="{% url 'db_your_property_detail' pro.pk %}" class="btn v1">View</a>
+                            <!-- <a href="#" class="btn v4"><i class="ion-android-delete"></i> Delete</a> -->
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="error-section pb-100">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3  error-text text-center">
+                                <div class="error-content">
+                                    <img src="/static/images/others/add_property.svg" alt="404 not found" />
+                                    <br>
+                                    <h4></h4>
+                                    <p>Search another way or Filter</p>
+                                </div>
+                                <div class="error-search-container">
+                                    <input type="button" class="mybutton" onclick="showModal()" value="Add Property" /> 
+                                    <!-- <a href="#" class="btn v1">Add Property</a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="owner_add_listing" data-backdrop="static">
+    <div class="modal-dialog model_width_incre modal-dialog-centered" id="error_model_width" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel" style="color: black;">{%if user.is_owner == False %}Owner and{% endif %} Property Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i
+                            class="lnr lnr-cross"></i></span></button>
+            </div>
+            <div class="modal-body">
+                <div class="user-login-section">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="login-wrapper">
+                                    <div class="ui-dash tab-content">
+                                        <div class="tab-pane fade show active" id="owner" role="tabpanel">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="signup-wrapper" id="image_media_error_page">
+                                                        <img src="/static/images/others/add_property.svg" alt="...">
+                                                        <p>Welcome Back! Please Login to your Account for latest property listings.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <form id="login-form" action="{% url 'index' %}" method="POST">
+                                                        {% csrf_token %}
+                                                        {% if user.is_owner == False %}
+                                                        <div class="form-group">
+                                                            <input type="text" name='firstName' tabindex="1"
+                                                                class="form-control" placeholder="First Name" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="text" name="lastName" tabindex="2"
+                                                                class="form-control" placeholder="Last Name" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="text" name="address" tabindex="2"
+                                                                class="form-control" placeholder="Your Address"
+                                                                required>
+                                                        </div>
+                                                        {% endif %}
+                                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                            {% for i in property_types %}
+                                                            <label class="btn btn-outline-dark"
+                                                                style="border-radius: 30px;">
+                                                                <input type="radio" name="property_type"
+                                                                    value="{{i.id}}" id="option{{i}}" ><i
+                                                                    class="lnr lnr-home"></i> {{i}}
+                                                            </label>
+                                                            {% endfor %}
+                                                        </div>
+                                                        
+                                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                            {% for i in property_for %}
+                                                            <label class="btn btn-outline-dark"
+                                                                style="border-radius: 30px;">
+                                                                <input type="radio" name="property_for" value="{{i.id}}"
+                                                                    id="option" required><i class="ion-ios-person-outline"></i>
+                                                                {{i}}
+                                                            </label>
+                                                            {% endfor %}
+                                                        </div>
+                                                        <div class="res-box text-center mt-30">
+                                                            <button type="submit" class="btn v8">Continue to Add
+                                                                Listing</button>
+                                                        </div>
+                                                    </form>
+                                                </div>            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>    
+    function showModal() {
+        $('#owner_add_listing').modal('toggle');
+    }
+</script>
+<!-- Dashboard Content ends-->
+{% else %}
+You are not Owner
+{% endif %}
+{% endif %}
+<!--Dashboard content ends-->
+
+
+{% endblock %}

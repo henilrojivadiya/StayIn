@@ -1,0 +1,469 @@
+{% extends 'base_dashboard.html' %}
+
+{% block dashboard_content %}
+<style>
+    .qty .count {
+        color: #000;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 30px;
+        padding: 0 2px;
+        min-width: 35px;
+        text-align: center;
+    }
+
+    .qty .plus {
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: top;
+        color: white;
+        width: 30px;
+        height: 30px;
+        font: 30px/1 Arial, sans-serif;
+        text-align: center;
+        border-radius: 50%;
+    }
+
+    .qty .minus {
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: top;
+        color: white;
+        width: 30px;
+        height: 30px;
+        font: 30px/1 Arial, sans-serif;
+        text-align: center;
+        border-radius: 50%;
+        background-clip: padding-box;
+    }
+
+    .minus:hover {
+        background-color: #717fe0 !important;
+    }
+
+    .plus:hover {
+        background-color: #717fe0 !important;
+    }
+
+    .qty input {
+        border: 0;
+        width: 2%;
+    }
+</style>
+{% if user.is_authenticated %}
+{% if user.is_owner %}
+{% if user_email_loop == owner_email_loop %}
+{% if owner_id_loop == property_id_loop %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="db-add-list-wrap">
+            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <div class="act-title">
+                    <h5>General Information :</h5>
+                </div>
+                <div class="db-add-listing">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" class="form-control filter-input" placeholder="Sea View Apartment">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Area</label>
+                                <input type="text" class="form-control filter-input"
+                                    placeholder="Address of your property">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Property Name</label>
+                                {{form.name}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Address</label>
+                                {{form.address}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Property Type</label>
+                            {{form.property_type}}
+                        </div>
+                        <div class="col-md-4">
+                            <label>Property For</label>
+                            {{form.property_for}}
+                        </div>
+                        <div class="col-md-4">
+                            <label>Popular Location</label>
+                            {{form.popular_location}}
+                        </div>
+                        <div class="col-md-4">
+                            <label>Property Category</label>
+                            {{form.property_category}}
+                        </div>
+                        <div class="col-md-12">
+                            <br>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Property Price</label>
+                                {{form.price}}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Property Deposite</label>
+                                {{form.deposite}}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="list_info">Description</label>
+                                <textarea class="form-control" id="list_info" rows="4"
+                                    placeholder="Enter your text here"></textarea>
+                            </div>
+                        </div>
+                        <div style="display: none;">
+                            {{form.description}}
+                            {{form.iframe_map_link}}
+                        </div>
+                    </div>
+
+                </div>
+        </div>
+        <div class="db-add-list-wrap">
+            <div class="act-title">
+                <h5>Property Details :</h5>
+            </div>
+            <div class="db-add-listing">
+                <div class="row mb-30">
+                    {% if check_property_type != 1 %}
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Number of Bedrooms</label><br>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                {% for i in details_range %}
+                                {% if i == request.session.session_total_room %}
+                                <label class="btn btn-outline-dark active" style="border-radius: 30%; border-color: green;">
+                                    <input type="radio" name="total_room" value="{{i}}" checked>{{i}}{%if forloop.last %}+{% endif %}
+                                </label>&nbsp;&nbsp;
+                                {% else %}
+                                <label class="btn btn-outline-dark " style="border-radius: 30%; border-color: green;">
+                                    <input type="radio" name="total_room" value="{{i}}">{{i}}{%if forloop.last %}+{% endif %}
+                                </label>&nbsp;&nbsp;
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!-- {{form.total_room}} -->
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Number Space per Rooms</label><br>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                {% for i in details_range %}
+                                {% if i == request.session.session_avail_space_per_room %}
+                                <label class="btn btn-outline-dark active" style="border-radius: 30%; border-color: green;">
+                                    <input type="radio" name="avail_space_per_room" value="{{i}}" checked>{{i}}{%if forloop.last %}+{% endif %}
+                                </label>&nbsp;&nbsp;
+                                {% else %}
+                                <label class="btn btn-outline-dark " style="border-radius: 30%; border-color: green;">
+                                    <input type="radio" name="avail_space_per_room" value="{{i}}">{{i}}{%if forloop.last %}+{% endif %}
+                                </label>&nbsp;&nbsp;
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!-- {{form.total_room}} -->
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Number of Bath</label><br>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                {% for i in details_range %}
+                                {% if i == request.session.session_total_bathroom %}
+                                <label class="btn btn-outline-dark active" style="border-radius: 30%; border-color: green;">
+                                    <input type="radio" name="total_bathroom" value="{{i}}" checked>{{i}}{%if forloop.last %}+{% endif %}
+                                </label>&nbsp;&nbsp;
+                                {% else %}
+                                <label class="btn btn-outline-dark " style="border-radius: 30%; border-color: green;">
+                                    <input type="radio" name="total_bathroom" value="{{i}}">{{i}}{%if forloop.last %}+{% endif %}
+                                </label>&nbsp;&nbsp;
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!-- {{form.total_room}} -->
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Total Space</label>
+                            
+                            <div class="row">
+                                <div class="col-md-4 qty">
+
+                                    <div class="dec button minus bg-light text-dark"
+                                        style="border: 1px black solid;">-</div>&nbsp;&nbsp;
+                                    <input type="text" class="count" name="total_space" min="0"
+                                        value="{{request.session.session_total_space}}" />
+                                    &nbsp;&nbsp;<div class="inc button plus bg-light text-dark"
+                                        style="border: 1px black solid;">+</div>
+
+                                    <!-- <input type="hidden" name="pro_id" value="{{pro.id}}"> -->
+                                </div>
+                            </div>
+
+                            <!-- {{form.total_space }} -->
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Available Space</label>
+                            
+                            <div class="row">
+                                <div class="col-md-4 qty">
+                                    <!-- <input class="form-control " type="number" min="0" max="{{pro.total_space}}"
+                                        name="available_space_count" value="{{pro.available_space}}"> -->
+
+                                    <div class="dec button minus bg-dark">-</div>&nbsp;&nbsp;
+
+                                    <input type="text" class="count" name="available_space" min="0"
+                                        value="{{request.session.session_available_space}}" />
+
+                                    &nbsp;&nbsp;<div class="inc button plus bg-dark">+</div>
+
+                                    <!-- <input type="hidden" name="pro_id" value="{{pro.id}}"> -->
+                                </div>
+                            </div>
+
+                            <!-- {{form.available_space }} -->
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="row" style="display: none;">
+                        {{form.total_space}}
+                        {{form.available_space}}
+                        {{form.total_room}}
+                        {{form.avail_space_per_room}}
+                        {{form.total_bathroom}}
+                    </div>
+                    {% endif %}
+
+                    <div class="col-md-12">
+                        <!-- <h4>Amenities :</h4> -->
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name='amenity_check' id="amenities_check" />
+                            <label>Amenities</label>
+                            <div class="row">
+                                {% for a in amenities %}
+                                <div class="col-md-4">
+                                    {% if a.id in property_wise_amenities %}
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-info active">
+                                            <img src="{{a.icon.url}}"
+                                                style="width: 9%; height: 20%;">&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <input class="amenities_checkbox" type="checkbox" value="{{a.id}}"
+                                                name="{{a}}" id='{{a}}' checked> {{a}}
+                                        </label><br><br>
+                                    </div>
+                                    {% else %}
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-info ">
+                                            <img src="{{a.icon.url}}"
+                                                style="width: 9%; height: 20%;">&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <input class="amenities_checkbox" type="checkbox" value="{{a.id}}"
+                                                name="{{a}}" id='{{a}}'> {{a}}
+                                        </label><br><br>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <!-- <h4>Policies :</h4> -->
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name='policies_check' id="policies_check_id" />
+                            <label>Policies</label><br>
+                            <div class="row">
+                                {% for i in policies %}
+                                <div class="col-md-12">
+                                    {% if i.id in property_wise_policies %}
+                                    <input class="form-check-input policies_checkbox" type="checkbox" value="{{i.id}}"
+                                        name="{{p}}" id='{{i}}' checked>
+                                    {% else %}
+                                    <input class="form-check-input policies_checkbox" type="checkbox" value="{{i.id}}"
+                                        name="{{p}}" id='{{i}}'>
+                                    {% endif %}
+                                    <label class="form-check-label" for="{{i}}">
+                                        {{i}}
+                                    </label><br>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="db-add-list-wrap">
+            <div class="act-title">
+                <h5>Gallery :</h5>
+            </div>
+            <h4>Featured Property Images</h4>
+            <div class="row">
+                {% for i in main_property_images %}
+                <div class="col-md-3">
+                    <div class="post-thumb">
+                        <img class="img-rounded" src="{{i.image.url}}" alt="" title=""
+                            style="width: 100%; height: 100%;">
+                    </div>
+                </div>
+                {% endfor %}
+            </div><br><br>
+            <div class="row">
+                <div class="col-md-3">
+
+                    <input type="file" name="property_main_image" />
+                </div>
+            </div><br>
+            <h4>Property Images</h4>
+            <div class="row">
+                <div class="col md-12">
+                    <input type="hidden" class="form-control" name='images_check' id="images_check_id" />
+                    <div class="row">
+                        {% for i in property_images %}
+                        <div class="col-md-3">
+                            <div class="btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-outline-dark">
+                                    <img for="{{i.image.url}}" class="img-rounded" src="{{i.image.url}}"
+                                        style="width: 200px; height: 200px;" alt="">
+                                    <input class="images_checkbox" type="checkbox" value="{{i.image}}"
+                                        id='{{i.image.url}}'> {{a}}
+                                </label><br><br><br>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- <div class="row">
+                        {% for i in property_images %}
+                        <div class="col-md-3">
+                            <div class="post-thumb">
+                                <img for="{{i.image.url}}" class="img-rounded" src="{{i.image.url}}" style="width: 100%; height: 100%;" alt=""><br>
+                                <input input class="form-check-input images_checkbox" type="checkbox" value="{{i.image}}" id='{{i.image.url}}'>
+                            </div><br>
+                        </div>
+                        {% endfor %}
+                    </div> -->
+                </div>
+            </div><br><br>
+            <div class="row">
+                <div class="col-md-3">
+
+                    <input type="file" name="property_images" multiple />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success amenities_save delete_images">Save</button>
+            </form>
+            <br><br>
+            <!-- <div class="db-add-listing">
+                <div class="row">
+                    <div class="col-md-12 mb-5">
+                        <div class="form-group">
+                            <form class="photo-upload">
+                                <div class="form-group">
+                                    <div class="add-listing__input-file-box">
+                                        <input class="add-listing__input-file" type="file" name="file">
+                                        <div class="add-listing__input-file-wrap">
+                                            <i class="lnr lnr-cloud-upload"></i>
+                                            <p>Click here to upload your images</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="add-btn">
+                            <a href="#" class="btn v3">Add Images</a>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-30">
+                        <label>Property Video Link</label>
+                        <input type="text" class="form-control filter-input"
+                            placeholder="https://www.youtube.com/watch?v=dqD0SqMNtks">
+                        <div class="add-btn">
+                            <a href="#" class="btn v3 mt-30">Add Video</a>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+{% else %}
+Fuck off
+{% endif %}
+{% else %}
+{% include 'error_404_page.html' %}
+{% endif %}
+{% else %}
+{% include 'error_404_page.html' %}
+{% endif %}
+{% else %}
+{% include 'error_404_page.html' %}
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('.amenities_save, .delete_images').click(function (event) {
+            var amenities_selected = ""
+            $('.amenities_checkbox:checked').each(function () {
+                amenities_selected += $(this).val() + ","
+            });
+            $('#amenities_check').val(amenities_selected)
+
+            var policies_selected = ""
+            $('.policies_checkbox:checked').each(function () {
+                policies_selected += $(this).val() + ","
+            });
+            $('#policies_check_id').val(policies_selected)
+
+            var images_selected = ""
+            $('.images_checkbox:checked').each(function () {
+                images_selected += $(this).val() + ","
+            });
+            $('#images_check_id').val(images_selected)
+        });
+    })
+
+    incrementVar = 0;
+    $('.inc.button').click(function () {
+        var $this = $(this),
+            $input = $this.prev('input'),
+            $parent = $input.closest('div'),
+            newValue = parseInt($input.val()) + 1;
+        $parent.find('.inc').addClass('a' + newValue);
+        $input.val(newValue);
+        incrementVar += newValue;
+    });
+
+    $('.dec.button').click(function () {
+        var $this = $(this),
+            $input = $this.next('input'),
+            $parent = $input.closest('div'),
+            newValue = parseInt($input.val()) - 1;
+        console.log($parent);
+        $parent.find('.inc').addClass('a' + newValue);
+        $input.val(newValue);
+        incrementVar += newValue;
+    });
+</script>
+
+{% endblock %}

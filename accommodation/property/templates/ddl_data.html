@@ -1,0 +1,139 @@
+{% load static %}
+
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade  show active  property-grid" id="grid-view">
+        <div class="row">
+            {% for room in rooms %}
+            {% if room.is_active and room.is_verify %}
+            <div class="col-md-4 col-sm-12">
+                <div class="single-property-box">
+                    {% for i in property_images %}
+                    {% if room.id == i.property.id %}
+                    <div class="property-item">
+                        <a class="property-img" href="{% url 'property_detail' room.pk %}"
+                            target="_blank"><img src="{{i.image.url}}" alt="#"></a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="property-title-box">
+                        <h4><a href="{% url 'property_detail' room.pk %}"
+                                target="_blank">{{room.name}}</a></h4>
+                        <div class="property-location">
+                            <i class="fa fa-map-marker-alt"></i>
+                            <p>{{room.popular_location}}</p>
+                        </div>
+                        <ul class="property-feature">
+                            <li> <i class="fas fa-arrows-alt"></i>
+                                <span>{{room.property_type}}</span>
+                            </li>
+                            <li> <i class="fas fa-car"></i>
+                                <span>{{room.property_for}}</span>
+                            </li>
+                            <li> <i class="fas fa-bed"></i>
+                                <span>{{room.total_space}}</span>
+                            </li>
+                            <li> <i class="fas fa-bath"></i>
+                                <span>{{room.available_space}}</span>
+                            </li>
+
+                        </ul>
+                        <div class="trending-bottom">
+                            <form method="POST" action="{% url 'property_detail' room.pk %}"
+                                target="_blank">{% csrf_token %}
+                                <input type="hidden" name="price" value="{{room.price}}"
+                                    class="form-control" />
+                                <div class="trend-left float-left">
+                                    <!-- <button type="submit"
+                                        class="btn btn-outline-dark">View</button><br> -->
+                            </form>
+                        </div>
+                        <a class="trend-right float-right">
+                            <div class="trend-open">
+                                <p>${{room.price}}<span class="per_month">month</span> </p>
+                            </div>
+                        </a><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<div class="tab-pane fade  property-list" id="list-view">
+    {% for room in rooms %}
+    {% if room.is_active and room.is_verify %}
+    <div class="single-property-box">
+        <div class="row">
+            <div class="col-md-5 col-sm-12">
+                <div class="property-item">
+                    <a class="property-img" href="single-listing-two.html"><img
+                            src="/static/images/property/property_3.jpg" alt="#"></a>
+                </div>
+            </div>
+            <div class="col-md-7 col-sm-12">
+                <div class="property-title-box">
+                    <h4><a href="single-listing-one.html">{{room.name}}</a></h4>
+                    <div class="property-location">
+                        <i class="fa fa-map-marker-alt"></i>
+                        <p>{{room.popular_location}}</p>
+                    </div>
+                    <ul class="property-feature">
+                        <li> <i class="fas fa-arrows-alt"></i>
+                            <span>{{room.property_type}}</span>
+                        </li>
+                        <li> <i class="fas fa-car"></i>
+                            <span>{{room.property_for}}</span>
+                        </li>
+                        <li> <i class="fas fa-bed"></i>
+                            <span>{{room.total_room}}</span>
+                        </li>
+                        <li> <i class="fas fa-bath"></i>
+                            <span>{{room.available_space}}</span>
+                        </li>
+
+                    </ul>
+                    <div class="trending-bottom">
+                        <div class="trend-left float-left">
+                            <!-- <ul class="product-rating">
+                                    <li><i class="fas fa-star"></i></li>
+                                    <li><i class="fas fa-star"></i></li>
+                                    <li><i class="fas fa-star"></i></li>
+                                    <li><i class="fas fa-star-half-alt"></i></li>
+                                    <li><i class="fas fa-star-half-alt"></i></li>
+                                </ul> -->
+                            <!-- <a href="#" class="btn btn-outline-dark">View</a> -->
+                        </div>
+                        <a class="trend-right float-right">
+                            <div class="trend-open">
+                                <p>$7500<span class="per_month">month</span></p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+
+</div>
+<!--pagination starts-->
+<div class="post-nav nav-res pt-50  ">
+    <div class="row">
+        <div class="col-md-8 offset-md-2  col-xs-12 ">
+            <div class="page-num text-center">
+                <ul>
+                    <li class="active"><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#"><i class="lnr lnr-chevron-right"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--pagination ends-->

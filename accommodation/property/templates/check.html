@@ -1,0 +1,202 @@
+{% load static %}
+{% if search_room_count != 0 %}
+                    <div class="item-wrapper" id="room">
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-lg-3 col-sm-5 col-5">
+
+                            </div>
+                            <div class="col-lg-4 col-sm-7 col-7">
+
+                            </div>
+                            <div class="col-lg-5 col-sm-12">
+                                <div class="item-element res-box  text-right sm-left">
+                                    <p>Showing <span>{{search_room_count}} of {{total_room_count}}</span> Listings</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade  show active  property-grid" id="grid-view">
+                                <div class="row">
+                                    {% for room in rooms %}
+                                    {% if room.is_active and room.is_verify %}
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="single-property-box">
+                                            {% for i in property_images %}
+                                            {% if room.id == i.property.id %}
+                                            <div class="property-item">
+                                                <a class="property-img" href="{% url 'property_detail' room.pk %}"
+                                                    target="_blank"><img src="{{i.image.url}}" alt="#"></a>
+                                            </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                            <div class="property-title-box">
+                                                <h4><a href="{% url 'property_detail' room.pk %}"
+                                                        target="_blank">{{room.name}}</a></h4>
+                                                <div class="property-location">
+                                                    <i class="fa fa-map-marker-alt"></i>
+                                                    <p>{{room.landmark}}</p>
+                                                </div>
+                                                <ul class="property-feature">
+                                                    <li> <i class="fas fa-home"></i>
+                                                        <span>{{room.property_type}}</span>
+                                                    </li>
+                                                    <li> <i class="ion-person"></i>
+                                                        <span>{{room.property_for}}</span>
+                                                    </li>
+                                                    <li> <i class="fas fa-bed"></i>
+                                                        <span>{{room.total_space}}</span>
+                                                    </li>
+                                                    <li> <i class="fas fa-bath"></i>
+                                                        <span>{{room.available_space}}</span>
+                                                    </li>
+
+                                                </ul>
+                                                <div class="trending-bottom">
+                                                    <form method="POST" id="price_filter" action="{% url 'property_detail' room.pk %}" target="_blank">{% csrf_token %}
+                                                        <input type="hidden" name="price" value="{{room.price}}"
+                                                            class="form-control" />
+                                                        <div class="trend-left float-left">
+                                                            <button class="btn v1" target="_blank">View</button><br>
+                                                    </form>
+                                                </div>
+                                                <a class="trend-right float-right">
+                                                    <div class="trend-open">
+                                                        <p>${{room.price}}<span class="per_month">{% if room.property_type.id != 1 %}Month{% else %}Year{% endif %}</span> </p>
+                                                    </div>
+                                                </a><br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="tab-pane fade  property-list" id="list-view">
+                            {% for room in page_obj %}
+                            {% if room.is_active and room.is_verify %}
+                            <div class="single-property-box">
+                                <div class="row">
+                                    <div class="col-md-5 col-sm-12">
+                                        {% for i in property_images %}
+                                        {% if room.id == i.property.id %}
+                                        <div class="property-item">
+                                            <a class="property-img" href="{% url 'property_detail' room.pk %}"
+                                                target="_blank"><img src="{{i.image.url}}" alt="#"></a>
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-7 col-sm-12">
+                                        <div class="property-title-box">
+                                            <h4><a href="single-listing-one.html">{{room.name}}</a></h4>
+                                            <div class="property-location">
+                                                <i class="fa fa-map-marker-alt"></i>
+                                                <p>{{room.landmark}}</p>
+                                            </div>
+                                            <ul class="property-feature">
+                                                <li> <i class="fas fa-arrows-alt"></i>
+                                                    <span>{{room.property_type}}</span>
+                                                </li>
+                                                <li> <i class="fas fa-car"></i>
+                                                    <span>{{room.property_for}}</span>
+                                                </li>
+                                                <li> <i class="fas fa-bed"></i>
+                                                    <span>{{room.total_room}}</span>
+                                                </li>
+                                                <li> <i class="fas fa-bath"></i>
+                                                    <span>{{room.available_space}}</span>
+                                                </li>
+
+                                            </ul>
+                                            <div class="trending-bottom">
+                                                <div class="trend-left float-left">
+
+                                                </div>
+                                                <a class="trend-right float-right">
+                                                    <div class="trend-open">
+                                                        <p>${{room.price}}<span class="per_month">month</span></p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+                        <!--pagination starts-->
+                        <div class="post-nav nav-res pt-50  ">
+                            <div class="row">
+                                <div class="col-md-8 offset-md-2  col-xs-12 ">
+                                    <div class="page-num text-center">
+                                        <ul>
+                                            {% if rooms.has_previous %}
+                                            <li>
+                                                <a href="{% url 'property_left_sidebar' %}?page={{rooms.previous_page_number}}"><i
+                                                    class="lnr lnr-chevron-left"></i></a>
+                                            </li>
+                                            {% endif %}
+
+                                            {% for i in rooms.paginator.page_range %}
+                                            {% if rooms.number == i %}
+                                            <li class="active" for="{{i}}"><a
+                                                    href="{% url 'property_left_sidebar' %}?page={{i}}" id="{{i}}">{{i}}</a></li>
+                                            {% elif i > rooms.number|add:'-10' and i < rooms.number|add:'10' %}
+                                                <li><a href="{% url 'property_left_sidebar' %}?page={{i}}">{{i}}</a>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                                {% if rooms.has_next %}
+                                                <li for="rooms.next_page_number"><a
+                                                        href="{% url 'property_left_sidebar' %}?page={{rooms.next_page_number}}" id="{{rooms.next_page_number}}"><i
+                                                            class="lnr lnr-chevron-right"></i></a></li>
+                                                {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--pagination ends-->
+                    </div>
+                    {% else %}
+                    <div class="error-section mt-150 pb-100">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 offset-md-3  error-text text-center">
+                                    <div class="error-content">
+                                        <img src="/static/images/others/search_home.svg" alt="404 not found" />
+                                        <br>
+                                        <h4>Ohh! No Data Found "{{request.session.session_index_search_text}}"</h4>
+                                        
+                                        <p>Search another way or Filter</p>
+                                    </div>
+                                    <div class="error-search-container">
+                                        <form>
+                                            <input style="background-color: #1f2229; border: none; border-bottom: solid 1px white; color: white;" class="form-control mr-sm-2 tag" type="search" placeholder="Search"
+                                            name="query" id='search_area_id' aria-label="Search"><br>
+                                            <button type="submit"><i class="lnr lnr-magnifier" style="color: white;"></i></button>
+                                        </form>
+                                    </div>
+                                    <br>
+                                    <small><a class="text-grey" href="https://www.freepik.com/free-photos-vectors/business">* Business
+                                            vector created by pikisuperstar - www.freepik.com</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+<!--pagination ends-->
+
+<script>
+    $(function () {
+
+$(".tag").autocomplete({
+    source: "{% url 'property_left_sidebar' %}",
+});
+});
+</script>
